@@ -1,0 +1,7 @@
+personal/*
+!personal/README.md
+modules/*
+!modules/README.md
+scratchpad/*
+!scratchpad/README.md
+.DS_Store
