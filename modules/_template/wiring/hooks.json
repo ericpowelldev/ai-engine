@@ -1,0 +1,7 @@
+[
+  {
+    "event": "PostToolUse",
+    "matcher": "Write|Edit",
+    "command": "bash \"{{AI_DIR}}/modules/<Module>/hooks/example-check.sh\""
+  }
+]

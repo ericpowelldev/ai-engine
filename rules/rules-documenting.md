@@ -1,6 +1,0 @@
-# Documenting Rules
-
-- **documenting-forward-only** — Project docs describe current intent only. No decisions-made tables, no version-cut framing ("for v1", "deferred"), no "we agreed"/"previously" language. Out-of-scope items are simply out of scope. Exception: a historical record explicitly requested.
-- **documenting-plain-facts** — Standalone docs carry plain facts and direction. Convert every anecdote to its present-tense rule; no war stories, personal-experience references, dates-as-status, or state snapshots. Concrete facts about systems are welcome — they're facts, not stories.
-- **documenting-standalone-delivery** — Docs written for an outside audience reference nothing local: no repo/folder names, filenames, symbols, paths, or sibling docs. Refer to systems by product/surface names; data-model field names and feature-flag names are fine. A test plan may reference only the branch it tests.
-- **documenting-fences-column-zero** — All markdown code fences sit at column 0; indented fences break markdown previews in some editors. If a fence belongs to a list item, end the list and place the fence at top level. Sweep existing files when editing. (Also enforced by the `check-markdown-fences` hook.)

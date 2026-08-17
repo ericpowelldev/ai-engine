@@ -1,10 +1,10 @@
 ---
-description: Scaffold a new self-contained organization module under modules/ and install its wiring
+description: Scaffold a new self-contained module from the template and install its wiring
 ---
 
 Create a new module. The baseline folder is `{{AI_DIR}}` (if that placeholder is literal, the baseline folder is the current project root).
 
-The organization: $ARGUMENTS
+The module: $ARGUMENTS
 
 If no name was given, ask for it. Then:
 
@@ -12,24 +12,23 @@ If no name was given, ask for it. Then:
 
 Ask the user (in one round of questions, skipping anything already stated):
 
-- **Activation scope** — the paths, repos, and contexts where this module applies. This is the most important answer: a module with a vague scope never loads. Push for concrete paths/patterns.
-- One or two sentences on what the organization is and what the user does there.
+- **Activation scope first** — is this a **global** module (active in every session — working style, identity) or a **scoped** one? Global → the scope section begins with the exact line `Scope: always` (`/setup` keys on it). Scoped → push for the concrete paths, repos, and contexts where it applies: a module with a vague scope silently never activates.
+- One or two sentences on what the organization/context is and what the user does there.
 - Any rules, facts, or guides they already know belong in it (optional — the module can start empty).
 
-## 2. Scaffold
+## 2. Scaffold from the template
 
-Create `modules/<Org>/` with the standard mirror — `rules/`, `guides/`, `knowledge/`, `scratchpad/`, `hooks/`, `wiring/commands/` — and:
+Copy `modules/_template/` to `modules/<Name>/`, then tailor it:
 
-- **`README.md`** (the module's entry point): what the org is, an **Activation scope** section listing the concrete paths/repos/contexts, and a routing table into the module's folders (mirror the shape of an existing module's README if one exists).
-- **Offer the standard instruction files**: an `orient.md` (module-specific orientation — load the module, survey the org's active work, ask what to work on; followed by `/orient <org>` or on scope match) and an `audit.md` (module-specific checks against the org's live environment; run by `/audit <org>`), both at the module root. Model them on an existing module's files if any exist. Offer a `setup.md` too only if the org needs environment prep (run by `/setup`). These are plain instruction docs — modules extend the generic commands with data, never with commands of their own.
-- Seed `rules/rules-<type>.md` files only for types that have rules now; don't create empty placeholders.
-- Route anything the user supplied in step 1 through the same classification and placement logic as `/add-entry`.
-- Everything user-neutral — the user is named only in `personal/`.
+- **`README.md`**: fill in what the module is, the **Activation scope** (per step 1), and the routing table. Delete the template's instructional comments.
+- **Keep only what has content now**: delete example rules files for types with no rules yet, and delete `orient.md`/`audit.md`/`setup.md` unless the user wants module-specific behavior for them (offer: an `orient.md` that surveys the org's active work, an `audit.md` that checks module content against the live environment, a `setup.md` only if the org needs environment prep).
+- Replace the template's example entries with the user's actual content, routed through the same classification and placement logic as `/add-entry`.
+- Rules read imperative and person-free; identity lives in `knowledge/about.md`.
 
 ## 3. Install and verify
 
-Run `hooks/setup.sh` from the baseline folder to install any module wiring, and confirm the module is gitignored (`git check-ignore modules/<Org>/README.md` should match the modules pattern — module contents never commit).
+Run `hooks/setup.sh` from the baseline folder — it installs any module wiring and, for a global module, wires `rules/rules-general.md` into the always-on import block. Confirm the module is gitignored (`git check-ignore modules/<Name>/README.md` matches — modules never commit).
 
 ## 4. Report back
 
-Summarize: the module's declared scope in one line, what was scaffolded, what was seeded, and remind the user that module guide commands go in `wiring/commands/` (module-prefixed, thin wrappers) followed by a `/setup` re-run.
+Summarize: the module's declared scope in one line, what was scaffolded and what was deleted from the template, what was seeded, and how it will activate (always, or on which matches). Remind the user that guide commands go in `wiring/commands/` (module-prefixed, thin wrappers) and hooks in `wiring/hooks.json`, followed by a `/setup` re-run.

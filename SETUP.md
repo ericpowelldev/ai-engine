@@ -8,7 +8,7 @@ How to wire this folder into your environment.
 2. Open Claude Code inside the cloned folder.
 3. Run `/setup`.
 
-`/setup` is idempotent — re-run it after a `git pull` or after adding/removing a module. By default (or with `all`) it covers the baseline **and** every module present; an optional fuzzy module argument (`/setup hd`) focuses a run on one module — its validation and any `setup.md` it ships — without narrowing the mechanical sync.
+`/setup` is idempotent — re-run it after a `git pull` or after adding/removing a module. By default (or with `all`) it covers the baseline **and** every module present; an optional fuzzy module argument (`/setup hd`) focuses a run on one module — its validation and any `setup.md` it ships — without narrowing the mechanical sync. On a fresh clone with no modules yet, it walks you through building your first ones from `modules/_template/`.
 
 ## OS support
 
@@ -17,15 +17,10 @@ Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defi
 ### What it does
 
 - Runs `hooks/setup.sh` for the mechanical steps:
-  - Adds an import of this folder's `CLAUDE.md` to your user-level `~/.claude/CLAUDE.md` (merging, never overwriting), so the baseline loads in every session no matter where it boots.
-  - Installs the global `/orient` command into `~/.claude/commands/`.
-  - Installs the rule skills into `~/.claude/skills/` so they fire in sessions booted outside this folder.
-  - Registers the hooks (e.g. the markdown fence check) in `~/.claude/settings.json`.
-  - Syncs each present module's `wiring/` contents (commands, skills, hook registrations) into `~/.claude/` — user-level only, so the committed `.claude/` stays module-agnostic.
-- Then guides personalization:
-  - Asks about you to seed `personal/` (local only, never committed).
-  - Writes any user-specific always-on rules into your user-level `~/.claude/CLAUDE.md`, keeping the committed baseline user-neutral.
-  - Offers to create your first module.
+  - Writes the managed **always-on import block** into your user-level `~/.claude/CLAUDE.md` (merging, never overwriting): this folder's `CLAUDE.md` plus each global module's (`Scope: always`) `rules/rules-general.md` — so the mechanics and your always-on rules load in every session no matter where it boots.
+  - Installs the root commands and rule skills into `~/.claude/` so they work in sessions booted anywhere.
+  - Syncs each present module's `wiring/` — commands and skills into `~/.claude/`, and every `wiring/hooks.json` entry into `~/.claude/settings.json` — all manifest-tracked, so removed modules clean up. The committed `.claude/` stays module-agnostic.
+- On a first run (no modules besides `_template/`), walks you through creating your first modules via `/add-module`: a global one for your working style and identity, and a scoped one for your organization if you have one.
 
 ## Other agents / tools
 
@@ -37,4 +32,4 @@ The content is plain markdown; only the plumbing under `.claude/` is Claude-spec
 
 ## Uninstall
 
-Delete every path listed in `~/.claude/.ai-wiring-manifest` (the exact record of what setup installed), then the manifest itself, the import line in `~/.claude/CLAUDE.md`, and the fence-check hook entry in `~/.claude/settings.json`. Then delete the clone. Modules and `personal/` content are local to your machine — copy them out first if you want to keep them.
+Delete every path listed in `~/.claude/.ai-wiring-manifest` (the exact record of what setup installed), then the manifest itself, the managed import block in `~/.claude/CLAUDE.md` (between the `ai-baseline` markers), and any hook entries in `~/.claude/settings.json` whose command points into this folder. Then delete the clone. Your modules are local to your machine — copy them out first if you want to keep them.

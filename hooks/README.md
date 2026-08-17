@@ -1,15 +1,11 @@
 # hooks/
 
-Scripts for anything mechanically checkable or reproducible. A hook replaces a written rule wherever possible: instructions decay under long context, scripts don't.
+**Engine tooling only.** This folder holds scripts that make the scaffold itself work — nothing that enforces content rules.
 
 ## Contents
 
-- `check-markdown-fences.sh` — PostToolUse hook: flags indented code fences after any write to a `.md` file (enforces `documenting-fences-column-zero`).
-- `setup.sh` — the mechanical half of `/setup`: installs the baseline import, global command, skills, hook registrations, and module wiring. Idempotent.
+- `setup.sh` — the mechanical half of `/setup`: writes the always-on import block, installs commands/skills, syncs module wiring, registers module hooks, maintains the install manifest. Idempotent.
 
-## Conventions
+## Where content hooks live
 
-- Scripts live here; the registration that makes them execute lives in `.claude/settings.json` (and `~/.claude/settings.json` for global coverage, written by `setup.sh`).
-- Hooks read the Claude Code hook JSON from stdin; exit code 2 with a stderr message feeds the finding back to the agent.
-- Keep hooks fast and side-effect-free — they run on every matching tool call.
-- Module-specific hooks ship in the module's `wiring/` and are registered by `setup.sh`.
+Scripts that mechanically enforce a module's rules belong in that module's `hooks/` folder, registered via its `wiring/hooks.json` — `setup.sh` merges those registrations into `~/.claude/settings.json` (entries: `{event, matcher, command}`, with `{{AI_DIR}}` resolved to the baseline folder's absolute path). Hooks read the Claude Code hook JSON from stdin; exit code 2 with a stderr message feeds the finding back to the agent. Keep them fast, side-effect-free, and coreutils-only so they run on macOS, Linux, and Git Bash on Windows.

@@ -1,40 +1,42 @@
 # modules/
 
-Self-contained organization packs. Each module holds everything specific to one organization — rules, guides, knowledge, scratch, hooks, and wiring — so the root stays generic and the module can be imported, removed, or set up independently.
+Self-contained content packs — **the only place content lives in this system**. Each module holds everything for one organization or context: rules, guides, knowledge, scratch, hooks, and wiring. The baseline is just the engine; modules make it do something.
 
 ## Structure
 
-Each module mirrors the root structure:
+Copy `_template/` (via `/add-module`) — it carries detailed examples for every file:
 
 ```
-modules/<Org>/
-├── README.md      # The module's ENTRY POINT: what it is, its activation
-│                  # scope (paths/repos/contexts it applies to), and a
-│                  # routing map into the folders below
-├── orient.md      # Optional: module-specific orientation steps, followed
-│                  # by /orient <org> (or on scope match)
-├── audit.md       # Optional: module-specific audit checks, run by /audit <org>
-├── setup.md       # Optional: module-specific setup steps, run by /setup [<org>]
-├── rules/         # Org-specific rules-<type>.md files
-├── guides/        # Org-specific deliverable guides
-├── knowledge/     # Org glossaries, repo maps, system gotchas
-├── scratchpad/    # Org-specific brainstorming
-├── hooks/         # Org-specific hook scripts
-└── wiring/        # Commands/skills/hook registrations to install
+modules/<Name>/
+├── README.md      # ENTRY POINT: what the module is, its ACTIVATION SCOPE,
+│                  # and a routing map into the folders below
+├── orient.md      # Optional: module-specific orientation, followed by /orient
+├── audit.md       # Optional: module-specific audit checks, run by /audit <name>
+├── setup.md       # Optional: module-specific setup steps, run by /setup
+├── rules/         # rules-<type>.md files (general, coding, testing, planning,
+│                  # documenting, designing)
+├── guides/        # Deliverable how-tos, wrapped by module-prefixed commands
+├── knowledge/     # Facts: identity (about.md), glossaries, repo maps, gotchas
+├── scratchpad/    # Module-specific brainstorming
+├── hooks/         # Scripts enforcing this module's rules mechanically
+└── wiring/        # commands/ (installed by /setup) + hooks.json (registrations)
 ```
 
-The generic `/orient`, `/audit`, and `/setup` commands take an optional module argument (fuzzy-matched — "hd" finds HopDrive) and follow the module's `orient.md`/`audit.md`/`setup.md` when present — modules extend those commands with data, not with commands of their own. `/setup` needs no argument to cover modules: its default (and `all`) sets up the baseline plus every module; a module argument just focuses the run.
+No nested `modules/` inside a module.
 
-No `personal/` (personal content is root-only) and no nested `modules/`.
+## Activation scope
 
-## Activation
+Declared in the module's README — the most important thing it says:
 
-The baseline is not aware of specific modules. Each module's `README.md` declares its scope; when the work matches, the agent reads that README first and follows its routing. Module rules extend the generic rules — the rule skills load both tiers.
+- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its `rules/rules-general.md` is wired into the always-on layer; its identity knowledge is read at orientation.
+- **Concrete paths/repos/contexts**: a **scoped** module, activating when the work matches. Vague scope = the module silently never activates.
 
-## Self-containment
+All active modules compose; on conflict, the more specifically-scoped module wins for its own work.
 
-Nothing module-specific lives outside the module's folder. All of a module's commands and skills ship in its `wiring/`, installed by `/setup`. Import a module by dropping its folder here and re-running `/setup`; remove it by deleting the folder and re-running `/setup`.
+## Modules extend commands with data
 
-## Privacy
+The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument ("hd" finds HopDrive) and follow the module's `orient.md`/`audit.md`/`setup.md` when present. Deliverable guides get module-prefixed command wrappers in `wiring/commands/`; mechanical checks register via `wiring/hooks.json`. Never module-specific commands for orient/audit/setup themselves.
 
-Everything here except this README is **gitignored** — modules stay on your machine.
+## Privacy & portability
+
+Everything here except this README and `_template/` is **gitignored** — modules are local, and each owns its own privacy (identity and private knowledge live inside the module). Import a module by dropping its folder here and re-running `/setup`; remove it by deleting the folder and re-running `/setup`. A module can itself be a git repo if you want to version or share it independently.

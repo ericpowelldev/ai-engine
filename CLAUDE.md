@@ -1,53 +1,34 @@
 # AI Baseline
 
-This folder — the **baseline folder**, wherever it lives and whatever it's named — is the single home for the rules, guides, knowledge, and tooling that shape how an AI agent works with the user. This file is the always-loaded baseline; everything else in the folder loads on demand, by paths relative to this file. Follow it in every session.
-
-## General rules
-
-- **general-answer-first** — A question wants analysis and a proposal, then a pause. No file edits or actions until an explicit go-ahead. A directive is the go-ahead for that specific change only; when a message mixes both, act on the directive and discuss the rest.
-- **general-ask-when-unsure** — Ask for clarification when even slightly unsure of intent. Flag bad prompt framing instead of guessing.
-- **general-git-safety** — Never commit, push, merge, or deploy unasked. Never move files in or out of the git index — staged files are the user's review marker, and staged-ness is never approval to commit.
-
-## Chat & writing patterns
-
-Patterns to follow:
-
-- Lead with the answer or outcome; supporting detail comes after.
-- Plain, complete sentences. Brief because it's selective, not compressed.
-- Recommend one direction when weighing options — not an exhaustive survey.
-- Docs describe current intent, standalone, in present tense.
-
-Anti-patterns to avoid:
-
-- Editing files off the back of a question.
-- Padding, hedging, or restating the prompt.
-- History framing anywhere ("we agreed", "previously", "changed from X").
-- War stories or status snapshots in standalone documents.
-
-## What lives where
-
-| Folder | Contents | Load when |
-|---|---|---|
-| `rules/` | Context-specific rule docs (`rules-<type>.md`) | Automatically, via the rule skills (see Wiring) |
-| `guides/` | How-tos for producing common deliverables | The user invokes one (command or by name) |
-| `knowledge/` | General, org-agnostic reference knowledge | A task needs the reference |
-| `personal/` | Who the user is: identity, preferences, terminology | Orientation, or when user context matters |
-| `scratchpad/` | Isolated brainstorming, one folder per idea | Working a scratchpad idea |
-| `modules/` | Self-contained organization-specific packs | The work matches a module's declared scope |
-| `hooks/` | Scripts for mechanically enforced behavior | Never loaded — they run via hook registration |
+This folder — the **baseline folder**, wherever it lives and whatever it's named — is the engine of a modular rules system for working with an AI agent. The baseline itself carries **no content and no opinions**: all rules, guides, knowledge, and scratch live in **modules**, and this file only defines how the system works. Follow these mechanics in every session.
 
 ## Modules
 
-A module is a self-contained pack of org-specific rules, guides, knowledge, and wiring under `modules/<Org>/`. This baseline is not aware of specific modules. Each module's `README.md` declares its scope — the paths, repos, or contexts it applies to. **Before starting work, check `modules/` for a module whose declared scope matches the work; if one matches, read its `README.md` first** and follow its routing. Module rules extend (never replace) the generic rules.
+A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's rules, guides, knowledge, scratchpad, hooks, and wiring. Each module's `README.md` is its entry point and declares its **activation scope**:
+
+- **`Scope: always`** — a global module, active in every session (working style, cross-context rules, the user's identity).
+- **Concrete paths/repos/contexts** — the module activates when the work matches.
+
+Multiple modules are active at once: every always-scoped module plus any scope-matched one. Their content composes; on conflict, the more specifically-scoped module wins for its own work. **Before starting work, identify the active modules** — read each always-scoped module's README (plus its identity knowledge) and check the scoped modules for a match; read a matching module's README first and follow its routing.
+
+`modules/_template/` is the committed scaffold: copy it (via `/add-module`) to build a new module. Everything else under `modules/` is gitignored — modules are local and own their own privacy.
 
 ## Rule types
 
-`general` (this file), `coding`, `testing`, `planning`, `documenting`, `designing`. Rules compose across types and tiers: planning work that produces code loads both planning and coding rules; module rules load on top of generic ones. Every rule has a domain-prefixed name (`coding-modular`) so it can be referred to directly.
+`general`, `coding`, `testing`, `planning`, `documenting`, `designing`.
+
+- **`general`** rules are always-on behavior: each always-scoped module's `rules/rules-general.md` is wired into the user-level `~/.claude/CLAUDE.md` by `/setup`, so they load with every session.
+- **Typed** rules load on demand: each type has a skill whose trigger description says when to load it; the skill reads `rules/rules-<type>.md` from **every active module**. Contexts compose — planning work that produces code loads both planning and coding rules.
+- Every rule has a domain-prefixed name (`coding-modular`) so it can be referred to directly. Rules are brief, imperative, one concern each.
+
+## Capture flow
+
+An agent's session memory is only the capture layer. Durable content graduates into a module via `/add-entry` (classifies rule vs. knowledge by the content's shape, places it in the owning active module) — and `/add-module` when no module fits.
 
 ## Wiring
 
-- **Rules are skills.** Each rule type has a skill whose trigger description says when to load it. When a skill fires, read `rules/rules-<type>.md` plus the active module's `rules/rules-<type>.md` if one applies.
-- **Guides are commands** named for the deliverable they produce. Module commands carry the module's prefix.
-- **`/orient`** re-orients a session: read this file, `personal/`, check for a matching module, then ask what the work is — new project, existing project, isolated issue, or scratchpad brainstorming. Do the same on the first message of a session when the work isn't already stated.
-- **`/setup`** initializes or refreshes an environment (see `SETUP.md`).
-- Claude-specific plumbing lives in `.claude/`; content stays in the folders above. Module wiring ships inside each module and is installed by `/setup`.
+- **Commands own procedures; modules contribute data.** `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument and follow the module's `orient.md`/`audit.md`/`setup.md` when present.
+- **Guides are commands** named for the deliverable, shipped in the owning module's `wiring/commands/` with the module prefix.
+- **Hooks** enforce rules mechanically: a module registers its hook scripts via `wiring/hooks.json`; the root `hooks/` folder holds only engine tooling (`setup.sh`).
+- `/setup` installs and refreshes everything (see `SETUP.md`); `/orient` re-orients a session — do its steps on the first message of a session when the work isn't already stated.
+- Claude-specific plumbing lives in `.claude/`; module wiring is installed to the user level and never committed here.

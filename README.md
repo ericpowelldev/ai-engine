@@ -1,42 +1,42 @@
 # AI
 
-A portable, model-agnostic home for everything that shapes how an AI agent works with you: always-on rules, on-demand rule packs, deliverable guides, reference knowledge, personal context, and organization-specific modules. Claude Code is the first-class integration; the content itself is plain markdown any tool can read.
+A portable, model-agnostic engine for working with an AI agent. The scaffold ships **zero opinions**: all rules, guides, knowledge, and scratch live in **modules** you build for yourself — the baseline provides the mechanics (loading, wiring, commands) and a detailed template to build from. Claude Code is the first-class integration; the content itself is plain markdown any tool can read.
 
 ## How it works
 
-Two layers keep context cheap:
-
-1. **Always-on baseline** — `CLAUDE.md` auto-loads in every session (via an import in your user-level `~/.claude/CLAUDE.md`, installed by setup). It holds only universal rules, chat/writing patterns, and the routing map. It stays thin: every line costs every session.
-2. **On-demand everything else** — rule packs load automatically as skills when a task matches, guides run as commands when you ask for a deliverable, knowledge and modules load when the work calls for them.
+- **Modules are the only content unit.** Each module under `modules/` is a self-contained pack — rules, guides, knowledge, scratchpad, hooks, wiring — with a README declaring its **activation scope**: `Scope: always` for a global module (working style, identity), or concrete paths/repos/contexts for a scoped one. Active modules compose.
+- **Two loading layers keep context cheap.** Always-on: the baseline mechanics plus each global module's `rules-general.md`, wired into your user-level config by setup. On-demand: typed rules load automatically as skills when a task matches (from every active module), guides run as commands, knowledge loads when the work calls for it.
+- **Modules are local.** Everything under `modules/` is gitignored except the template — the repo shares the engine, never your content. Each module owns its own privacy.
 
 ## Folder map
 
-| Folder | Purpose | Committed? |
+| Path | Purpose | Committed? |
 |---|---|---|
-| `rules/` | Short rule docs per context (`rules-coding.md`, …) | Yes |
-| `hooks/` | Scripts that enforce rules mechanically | Yes |
-| `guides/` | How-tos for producing common deliverables | Yes |
-| `knowledge/` | General, org-agnostic reference knowledge | Yes |
-| `personal/` | Who you are — identity, preferences, terminology | No (local only) |
-| `scratchpad/` | Isolated brainstorming, one folder per idea | No (local only) |
-| `modules/` | Self-contained organization packs | No (local only) |
-| `.claude/` | Claude Code plumbing: commands, skills, hook registration | Yes |
-
-`personal/`, `scratchpad/`, and `modules/` keep only their `README.md` in git — everything else inside them stays on your machine.
+| `CLAUDE.md` | The engine's mechanics — how modules, rules, and wiring work | Yes |
+| `.claude/` | Claude Code plumbing: commands and skills | Yes |
+| `hooks/` | Engine tooling only (`setup.sh`) | Yes |
+| `modules/_template/` | The scaffold to copy for a new module, with detailed neutral examples | Yes |
+| `modules/<yours>/` | Your content: rules, guides, knowledge, scratch, hooks, wiring | No (local only) |
 
 ## Getting started
 
-Clone anywhere, open Claude Code inside the folder, run `/setup`. See `SETUP.md` for details and for setting up with other tools.
+Clone anywhere, open Claude Code inside the folder, run `/setup`. On a fresh clone it walks you through building your first modules — a global one for how you work, a scoped one for your organization. See `SETUP.md` for details and other tools.
+
+## The commands
+
+| Command | What it does |
+|---|---|
+| `/orient [module]` | Orient a session: always-on modules, then the scoped module (fuzzy-matched argument or automatic scope detection), following the module's own `orient.md` when it has one |
+| `/add-entry <entry>` | Capture a rule or fact — classifies the shape by content, places it in the owning module's right file, reports the reasoning |
+| `/add-module <name>` | Scaffold a new module from `modules/_template/` — scope first, then content |
+| `/audit [module\|all]` | Deep-dive audit — engine consistency for the baseline, full-content + reference integrity per module, plus the module's own `audit.md` checks |
+| `/setup [module]` | Install/refresh all wiring; walks first-time users through module creation |
+
+Modules extend `/orient`, `/audit`, and `/setup` with data — optional `orient.md`, `audit.md`, `setup.md` files at the module root — never with commands of their own. Deliverable guides get module-prefixed command wrappers in the module's `wiring/commands/`.
 
 ## Adding to it
 
-- **A new rule or fact** → run `/add-entry <the entry>` — it classifies the shape (rule vs. knowledge — the content decides, not how you phrased it), determines the tier (generic vs. module) and file, writes it in house style, and reports where it landed and why. Manually: rules go in the matching `rules/rules-<type>.md` (or the module's) with a domain-prefixed name (`coding-modular`); facts go in the fitting knowledge file. If a script could enforce a rule instead, write a hook.
-- **A new guide** → `guides/` (or the module's), plus a thin command wrapper named for the deliverable.
-- **A new organization** → run `/add-module <org>` — scaffolds the module mirror with its scope-declaring README and installs its wiring.
-- **An idea with no home** → its own folder under `scratchpad/`.
-
-Rules are the law; an agent's session memory is only the capture layer — when a correction proves durable, graduate it into a rules file.
-
-## Modules are self-contained
-
-Everything org-specific — rules, guides, knowledge, wiring — lives inside `modules/<Org>/` and never leaks into the root. Nothing committed here names a specific module. Import a module by dropping its folder into `modules/` and re-running `/setup`; remove it by deleting the folder and re-running `/setup`.
+- **A rule or fact** → `/add-entry`. An agent's session memory is only the capture layer; durable corrections graduate into a module.
+- **A guide** → the owning module's `guides/`, plus a thin command wrapper in its `wiring/commands/`.
+- **A mechanical check** → a script in the module's `hooks/`, registered via its `wiring/hooks.json`.
+- **A new organization or context** → `/add-module`.
