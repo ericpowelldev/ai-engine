@@ -1,4 +1,4 @@
-# AI
+# AI Engine
 
 A portable, model-agnostic engine for working with an AI agent. The scaffold ships **zero opinions**: all rules, guides, knowledge, and scratch live in **modules** you build for yourself — the baseline provides the mechanics (loading, wiring, commands) and a detailed template to build from. Claude Code is the first-class integration; the content itself is plain markdown any tool can read.
 
