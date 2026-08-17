@@ -5,6 +5,7 @@
 ## Contents
 
 - `setup.sh` — the mechanical half of `/setup`: writes the always-on import block, installs commands/skills, syncs module wiring, registers module hooks, maintains the install manifest. Idempotent.
+- `pull.sh` — the mechanical half of `/pull`: pulls the baseline repo and every module repo (ff-only; skips repos with uncommitted changes or no remote), then runs `setup.sh` so pulled wiring and rules take effect.
 
 ## Where content hooks live
 

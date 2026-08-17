@@ -6,7 +6,7 @@ A portable, model-agnostic engine for working with an AI agent. The scaffold shi
 
 - **Modules are the only content unit.** Each module under `modules/` is a self-contained pack — rules, guides, knowledge, scratchpad, hooks, wiring — with a README declaring its **activation scope**: `Scope: always` for a global module (working style, identity), or concrete paths/repos/contexts for a scoped one. Active modules compose.
 - **Two loading layers keep context cheap.** Always-on: the baseline mechanics plus each global module's `rules-general.md`, wired into your user-level config by setup. On-demand: typed rules load automatically as skills when a task matches (from every active module), guides run as commands, knowledge loads when the work calls for it.
-- **Modules are local.** Everything under `modules/` is gitignored except the template — the repo shares the engine, never your content. Each module owns its own privacy.
+- **Modules are local.** Everything under `modules/` is gitignored except the template — the repo shares the engine, never your content. Each module owns its own privacy, and can be its own git repo for versioning/backup: the engine repo never sees module history, and `/pull` updates the whole family (engine + every module repo) in one motion.
 
 ## Folder map
 
@@ -31,6 +31,7 @@ Clone anywhere, open Claude Code inside the folder, run `/setup`. On a fresh clo
 | `/add-module <name>` | Scaffold a new module from `modules/_template/` — scope first, then content |
 | `/audit [module\|all]` | Deep-dive audit — engine consistency for the baseline, full-content + reference integrity per module, plus the module's own `audit.md` checks |
 | `/setup [module]` | Install/refresh all wiring; walks first-time users through module creation |
+| `/pull` | Update everything: pull the baseline repo and every module repo (ff-only, skips dirty trees), then refresh the wiring |
 
 Modules extend `/orient`, `/audit`, and `/setup` with data — optional `orient.md`, `audit.md`, `setup.md` files at the module root — never with commands of their own. Deliverable guides get module-prefixed command wrappers in the module's `wiring/commands/`.
 

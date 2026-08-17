@@ -8,7 +8,7 @@ How to wire this folder into your environment.
 2. Open Claude Code inside the cloned folder.
 3. Run `/setup`.
 
-`/setup` is idempotent — re-run it after a `git pull` or after adding/removing a module. By default (or with `all`) it covers the baseline **and** every module present; an optional fuzzy module argument (`/setup hd`) focuses a run on one module — its validation and any `setup.md` it ships — without narrowing the mechanical sync. On a fresh clone with no modules yet, it walks you through building your first ones from `modules/_template/`.
+`/setup` is idempotent — re-run it after pulling or after adding/removing a module (or just use `/pull`, which pulls the baseline repo and every module repo ff-only, then re-runs setup automatically). By default (or with `all`) it covers the baseline **and** every module present; an optional fuzzy module argument (`/setup hd`) focuses a run on one module — its validation and any `setup.md` it ships — without narrowing the mechanical sync. On a fresh clone with no modules yet, it walks you through building your first ones from `modules/_template/`.
 
 ## OS support
 
