@@ -32,6 +32,7 @@ Clone anywhere, open Claude Code inside the folder, run `/setup`. On a fresh clo
 | `/audit [module\|all]` | Deep-dive audit — engine consistency for the baseline, full-content + reference integrity per module, plus the module's own `audit.md` checks |
 | `/setup [module]` | Install/refresh all wiring; walks first-time users through module creation |
 | `/pull` | Update everything: pull the baseline repo and every module repo (ff-only, skips dirty trees), then refresh the wiring |
+| `/push [message]` | Back up the modules: commit (default message `sync: <date>`) and push each module repo's current branch; skips clean-and-synced modules; never touches the baseline repo |
 
 Modules extend `/orient`, `/audit`, and `/setup` with data — optional `orient.md`, `audit.md`, `setup.md` files at the module root — never with commands of their own. Deliverable guides get module-prefixed command wrappers in the module's `wiring/commands/`.
 

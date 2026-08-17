@@ -30,5 +30,5 @@ An agent's session memory is only the capture layer. Durable content graduates i
 - **Commands own procedures; modules contribute data.** `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument and follow the module's `orient.md`/`audit.md`/`setup.md` when present.
 - **Guides are commands** named for the deliverable, shipped in the owning module's `wiring/commands/` with the module prefix.
 - **Hooks** enforce rules mechanically: a module registers its hook scripts via `wiring/hooks.json`; the root `hooks/` folder holds only engine tooling (`setup.sh`).
-- `/setup` installs and refreshes everything (see `SETUP.md`); `/pull` updates the baseline and every module repo, then refreshes the wiring; `/orient` re-orients a session — do its steps on the first message of a session when the work isn't already stated.
+- `/setup` installs and refreshes everything (see `SETUP.md`); `/pull` updates the baseline and every module repo, then refreshes the wiring; `/push` commits and pushes the module repos (never the baseline); `/orient` re-orients a session — do its steps on the first message of a session when the work isn't already stated.
 - Claude-specific plumbing lives in `.claude/`; module wiring is installed to the user level and never committed here.
