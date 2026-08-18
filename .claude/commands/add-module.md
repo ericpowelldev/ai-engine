@@ -22,6 +22,7 @@ Copy `modules/_template/` to `modules/<Name>/`, then tailor it:
 
 - **`README.md`**: fill in what the module is, the **Activation scope** (per step 1), and the routing table. Delete the template's instructional comments.
 - **Keep only what has content now**: delete example rules files for types with no rules yet, and delete `orient.md`/`audit.md`/`setup.md` unless the user wants module-specific behavior for them (offer: an `orient.md` that surveys the org's active work, an `audit.md` that checks module content against the live environment, a `setup.md` only if the org needs environment prep).
+- **Tailor `wiring/` — never leave the examples**: replace `wiring/commands/example-deliverable.md` with a real module-prefixed wrapper or delete it, and replace `wiring/hooks.json`'s example entry with a real registration or delete the file. Left verbatim, `/setup` installs a broken command (colliding across modules) and registers a hook that fails on every Write/Edit.
 - Replace the template's example entries with the user's actual content, routed through the same classification and placement logic as `/add-entry`.
 - Rules read imperative and person-free; identity lives in `knowledge/about.md`.
 

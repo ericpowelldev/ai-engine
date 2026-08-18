@@ -39,7 +39,7 @@ push_module() { # dir label
   fi
 
   # Anything to push? (No upstream counts as ahead.)
-  local ahead
+  local ahead out
   if git -C "$dir" rev-parse --abbrev-ref --symbolic-full-name "@{u}" > /dev/null 2>&1; then
     ahead="$(git -C "$dir" rev-list --count "@{u}..HEAD" 2>/dev/null || echo 0)"
     if [ "$ahead" = "0" ]; then

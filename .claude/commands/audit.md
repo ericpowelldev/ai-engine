@@ -32,7 +32,7 @@ Every pointer in every file must resolve. Check, in each file:
 
 The same fact stated in two places must match:
 
-- The folder map (`CLAUDE.md`'s table, `README.md`'s table, the folder READMEs) — same folders, same purposes, same committed/local split.
+- The folder map (`README.md`'s table, the folder READMEs) — same folders, same purposes, same committed/local split.
 - The rule-types registry (`registries/rule-types.md`) vs. the modules' `rules-*.md` files: every used type registered, registered-but-unused types noted.
 - The documented gitignore pattern vs. the actual `.gitignore` vs. the README's "Committed?" column.
 - Any behavior described in two docs (setup flow, module activation, wiring install, skill generation) — descriptions agree.

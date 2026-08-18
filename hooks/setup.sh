@@ -121,7 +121,9 @@ SKILLEOF
     echo "$SKILL_FILE" >> "$NEW_MANIFEST"
     GENERATED="$GENERATED$TYPE "
   done
-  echo "generated: typed-rule skills (${GENERATED%% })"
+  if [ -n "$GENERATED" ]; then
+    echo "generated: typed-rule skills (${GENERATED%% })"
+  fi
 
   # Info: registered types nobody uses yet
   grep -oE '^\- \*\*[a-z-]+\*\* — Load when:' "$REGISTRY" | sed 's/^- \*\*//; s/\*\*.*//' | while read -r RT; do
