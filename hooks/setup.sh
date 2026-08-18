@@ -6,7 +6,7 @@
 
 set -euo pipefail
 
-AI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+AI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && { pwd -W 2>/dev/null || pwd; })"
 CLAUDE_USER_DIR="$HOME/.claude"
 MANIFEST="$CLAUDE_USER_DIR/.ai-wiring-manifest"
 BLOCK_START="<!-- ai-baseline:start -->"
