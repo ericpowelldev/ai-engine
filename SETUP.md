@@ -22,6 +22,18 @@ Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defi
   - Syncs each present module's `wiring/` — commands and skills into `~/.claude/`, and every `wiring/hooks.json` entry into `~/.claude/settings.json` — all manifest-tracked, so removed modules clean up. The committed `.claude/` stays module-agnostic.
 - On a first run (no modules besides `_template/`), walks you through creating your first modules via `/add-module`: a global one for your working style and identity, and a scoped one for your organization if you have one.
 
+## Terminal shortcuts (optional)
+
+The commands cover in-session use; for syncing from a plain terminal, add shortcuts to your shell's config file (`.zshrc`, `.bashrc`, fish config, PowerShell profile — whatever your shell uses), pointing at your clone's path:
+
+```sh
+alias ai='cd <path-to-this-folder> && claude'
+alias ai-pull='bash <path-to-this-folder>/hooks/pull.sh'
+alias ai-push='bash <path-to-this-folder>/hooks/push.sh'
+```
+
+`ai` opens an agent session in the baseline folder; `ai-pull` syncs everything down and refreshes the wiring; `ai-push "message"` commits and pushes the module repos (message optional). Shells without POSIX aliases (e.g. PowerShell) use their own function/alias equivalent — the scripts only need `bash <script>` to run. These live in your shell config, not in this repo — shortcuts are personal environment, not scaffold.
+
 ## Other agents / tools
 
 Give your agent this prompt:

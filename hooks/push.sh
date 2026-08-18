@@ -11,7 +11,10 @@ MSG="${1:-sync: $(date +%Y-%m-%d)}"
 
 push_module() { # dir label
   local dir="$1" label="$2"
-  [ -d "$dir/.git" ] || return 0
+  if [ ! -d "$dir/.git" ]; then
+    echo "skipped: $label (not a git repo — git init + add a remote to include it in backups)"
+    return 0
+  fi
   if [ -z "$(git -C "$dir" remote 2>/dev/null)" ]; then
     echo "skipped: $label (no remote configured)"
     return 0

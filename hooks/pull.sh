@@ -8,7 +8,11 @@ AI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 pull_repo() { # dir label
   local dir="$1" label="$2"
-  [ -d "$dir/.git" ] || return 0
+  if [ ! -d "$dir/.git" ]; then
+    # The baseline is always a repo (it was cloned); only modules can lack one.
+    echo "skipped: $label (not a git repo)"
+    return 0
+  fi
   if [ -z "$(git -C "$dir" remote 2>/dev/null)" ]; then
     echo "skipped: $label (no remote configured)"
     return 0
