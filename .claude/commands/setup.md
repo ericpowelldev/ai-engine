@@ -7,7 +7,7 @@ Set up (or refresh) this baseline folder in the user's environment. Idempotent �
 Optional module argument: $ARGUMENTS
 
 - **No argument, or `all`** → the default: set up the baseline and every module present.
-- **A module name** → fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "hd" → HopDrive), then substring. Exactly one match → focus this run on that module: the mechanical sync still runs in full (it's idempotent and covers everything anyway), but validation, module-specific setup, and the report center on the resolved module. Zero or multiple matches → list the modules found and ask which was meant.
+- **A module name** → fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "aw" → AcmeWidgets), then substring. Exactly one match → focus this run on that module: the mechanical sync still runs in full (it's idempotent and covers everything anyway), but validation, module-specific setup, and the report center on the resolved module. Zero or multiple matches → list the modules found and ask which was meant.
 
 ## The end state (the contract)
 

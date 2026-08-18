@@ -35,7 +35,7 @@ All active modules compose; on conflict, the more specifically-scoped module win
 
 ## Modules extend commands with data
 
-The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument ("hd" finds HopDrive) and follow the module's `orient.md`/`audit.md`/`setup.md` when present. Deliverable guides get module-prefixed command wrappers in `wiring/commands/`; mechanical checks register via `wiring/hooks.json`. Never module-specific commands for orient/audit/setup themselves.
+The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument (initials or partial names match) and follow the module's `orient.md`/`audit.md`/`setup.md` when present. Deliverable guides get module-prefixed command wrappers in `wiring/commands/`; mechanical checks register via `wiring/hooks.json`. Never module-specific commands for orient/audit/setup themselves.
 
 ## Privacy & portability
 

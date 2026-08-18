@@ -9,7 +9,7 @@ Optional scope argument: $ARGUMENTS
 **Resolve the scope first:**
 
 - **No argument** → audit the baseline: the engine only (every committed file — the baseline holds no content).
-- **A module name** → fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "hd" → HopDrive), then substring. Exactly one match → audit that module. Zero or multiple matches → list the modules found and ask which was meant.
+- **A module name** → fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "aw" → AcmeWidgets), then substring. Exactly one match → audit that module. Zero or multiple matches → list the modules found and ask which was meant.
 - **`all`** → the baseline plus every module (skip `_template` as a module; it's audited as part of the baseline).
 
 This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/` and `hooks/`, and the whole `modules/_template/`; for a module: every module file. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
