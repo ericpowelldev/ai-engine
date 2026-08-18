@@ -1,6 +1,6 @@
 #!/bin/bash
 # Mechanical half of /setup. Idempotent — safe to re-run after git pull or module changes.
-# Installs: the always-on import block (baseline + each always-scoped module's general
+# Installs: the always-on import block (baseline + each always-scoped module's global
 # rules), global commands/skills, module wiring (commands, skills, hooks.json), all
 # manifest-tracked so removed modules clean up. Never overwrites unrelated user config.
 
@@ -15,7 +15,7 @@ BLOCK_END="<!-- ai-baseline:end -->"
 mkdir -p "$CLAUDE_USER_DIR/commands" "$CLAUDE_USER_DIR/skills"
 
 # --- 1. Always-on import block in user-level CLAUDE.md ---
-# Baseline import + one general-rules import per always-scoped module (README begins
+# Baseline import + one global-rules import per always-scoped module (README begins
 # its scope with the exact line "Scope: always"). Managed block, rebuilt every run.
 USER_CLAUDE_MD="$CLAUDE_USER_DIR/CLAUDE.md"
 touch "$USER_CLAUDE_MD"
@@ -26,9 +26,9 @@ for MODULE in "$AI_DIR"/modules/*/; do
   NAME="$(basename "$MODULE")"
   [ "$NAME" = "_template" ] && continue
   if [ -f "$MODULE/README.md" ] && grep -q '^Scope: always' "$MODULE/README.md" \
-     && [ -f "$MODULE/rules/rules-general.md" ]; then
+     && [ -f "$MODULE/rules/rules-global.md" ]; then
     BLOCK="$BLOCK
-@$AI_DIR/modules/$NAME/rules/rules-general.md"
+@$AI_DIR/modules/$NAME/rules/rules-global.md"
   fi
 done
 BLOCK="$BLOCK
@@ -67,14 +67,67 @@ install_dir() { # srcdir dstdir
   done
 }
 
-# Global commands + skills (work in sessions booted anywhere).
+# Global commands (work in sessions booted anywhere).
 # All root commands install globally except /setup, which only makes sense
 # run from inside the baseline folder.
 for CMD in "$AI_DIR"/.claude/commands/*.md; do
   [ "$(basename "$CMD")" = "setup.md" ] && continue
   install_file "$CMD" "$CLAUDE_USER_DIR/commands/$(basename "$CMD")"
 done
-install_dir "$AI_DIR/.claude/skills" "$CLAUDE_USER_DIR/skills"
+
+# --- Typed-rule skill generation from the rule-types registry ---
+# The registry (registries/rule-types.md) defines the types and their triggers;
+# a skill is generated only for types some module actually uses. The type
+# "global" is reserved (always-on via the import block, never a skill).
+REGISTRY="$AI_DIR/registries/rule-types.md"
+
+# Discover the types in use across modules (skip _template, skip global)
+USED_TYPES="$(
+  for M in "$AI_DIR"/modules/*/; do
+    [ "$(basename "$M")" = "_template" ] && continue
+    for F in "$M"rules/rules-*.md; do
+      [ -f "$F" ] || continue
+      basename "$F" | sed 's/^rules-//; s/\.md$//'
+    done
+  done | grep -v '^global$' | sort -u || true
+)"
+
+if [ -n "$USED_TYPES" ] && [ ! -f "$REGISTRY" ]; then
+  echo "WARNING: typed rules files exist but no registry — copy registries/rule-types.template.md to registries/rule-types.md"
+fi
+
+if [ -f "$REGISTRY" ]; then
+  GENERATED=""
+  for TYPE in $USED_TYPES; do
+    TRIGGER="$(grep -m1 "^- \*\*$TYPE\*\* — Load when: " "$REGISTRY" | sed "s/^- \*\*$TYPE\*\* — Load when: //" || true)"
+    if [ -z "$TRIGGER" ]; then
+      echo "WARNING: type \"$TYPE\" has rules files but no registry entry — register it in registries/rule-types.md or rename the files"
+      continue
+    fi
+    SKILL_FILE="$CLAUDE_USER_DIR/skills/$TYPE-rules/SKILL.md"
+    mkdir -p "$(dirname "$SKILL_FILE")"
+    cat > "$SKILL_FILE" << SKILLEOF
+---
+name: $TYPE-rules
+description: Load when $TRIGGER Loads the $TYPE rules from every active module.
+---
+
+The baseline folder is \`$AI_DIR\`.
+
+1. Identify the active modules under \`modules/\`: every module whose README declares \`Scope: always\`, plus any whose declared scope matches the current work. (Skip \`_template\`.)
+2. Read \`rules/rules-$TYPE.md\` from each active module that has one.
+3. Apply them together — on conflict, the more specifically-scoped module's rule wins for its own work.
+SKILLEOF
+    echo "$SKILL_FILE" >> "$NEW_MANIFEST"
+    GENERATED="$GENERATED$TYPE "
+  done
+  echo "generated: typed-rule skills (${GENERATED%% })"
+
+  # Info: registered types nobody uses yet
+  grep -oE '^\- \*\*[a-z-]+\*\* — Load when:' "$REGISTRY" | sed 's/^- \*\*//; s/\*\*.*//' | while read -r RT; do
+    echo "$USED_TYPES" | grep -qx "$RT" || echo "info: registered type \"$RT\" has no rules files yet (no skill generated)"
+  done
+fi
 
 # Module wiring -> user-level only (global commands/skills cover every session,
 # and the committed .claude/ stays module-agnostic)
@@ -92,6 +145,7 @@ if [ -f "$MANIFEST" ]; then
   while read -r OLD; do
     if [ -n "$OLD" ] && ! grep -qFx "$OLD" "$NEW_MANIFEST"; then
       rm -f "$OLD" && echo "removed stale wiring: $OLD"
+      rmdir "$(dirname "$OLD")" 2>/dev/null || true
     fi
   done < "$MANIFEST"
 fi

@@ -15,10 +15,10 @@ Multiple modules are active at once: every always-scoped module plus any scope-m
 
 ## Rule types
 
-`general`, `coding`, `testing`, `planning`, `documenting`, `designing`.
+Rule types are **user-defined in the rule-types registry** (`registries/rule-types.md`): one line per type with its load trigger. The engine ships no types of its own — `registries/` holds the committed scaffolding (README + template) while the real registry stays local.
 
-- **`general`** rules are always-on behavior: each always-scoped module's `rules/rules-general.md` is wired into the user-level `~/.claude/CLAUDE.md` by `/setup`, so they load with every session.
-- **Typed** rules load on demand: each type has a skill whose trigger description says when to load it; the skill reads `rules/rules-<type>.md` from **every active module**. Contexts compose — planning work that produces code loads both planning and coding rules.
+- **Typed** rules load on demand: `/setup` generates one skill per registered type that some module actually uses; the skill's trigger is the registry's `Load when:` text, and its body reads `rules/rules-<type>.md` from **every active module**. Contexts compose — work matching two triggers loads both types. Minting a new type = one registry line + a rules file + a `/setup` re-run.
+- **`global`** is the one reserved type — mechanism, not vocabulary: each always-scoped module's `rules/rules-global.md` is wired into the user-level `~/.claude/CLAUDE.md` by `/setup`, loading with every session; never skill-generated.
 - Every rule has a domain-prefixed name (`coding-modular`) so it can be referred to directly. Rules are brief, imperative, one concern each.
 
 ## Capture flow

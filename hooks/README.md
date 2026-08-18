@@ -4,7 +4,7 @@
 
 ## Contents
 
-- `setup.sh` — the mechanical half of `/setup`: writes the always-on import block, installs commands/skills, syncs module wiring, registers module hooks, maintains the install manifest. Idempotent.
+- `setup.sh` — the mechanical half of `/setup`: writes the always-on import block, installs commands, generates the rule-type skills from `registries/rule-types.md`, syncs module wiring, registers module hooks, maintains the install manifest. Idempotent.
 - `pull.sh` — the mechanical half of `/pull`: pulls the baseline repo and every module repo (ff-only; skips repos with uncommitted changes or no remote), then runs `setup.sh` so pulled wiring and rules take effect.
 - `push.sh` — the mechanical half of `/push`: commits (message argument, default `sync: <date>`) and pushes every module repo's current branch; pushes clean-but-ahead modules, skips clean-and-synced ones, sets the upstream on a first push. Never force, never the baseline repo — engine commits are hand-written.
 

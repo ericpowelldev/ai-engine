@@ -22,13 +22,13 @@ A fact with a rule-shaped consequence is captured as knowledge, with a companion
 All content lives in modules — the baseline holds none:
 
 - **Scoped module** — the entry involves a specific organization's or context's systems, repos, conventions, or domain in any way. Match against each scoped module's declared scope.
-- **Always-scoped module** — cross-context content: working style, universal conventions, identity. General behavioral rules go in its `rules/rules-general.md` (always-on via the `/setup` import — that's the expensive tier, so confirm before adding there and offer the closest typed file as the alternative).
+- **Always-scoped module** — cross-context content: working style, universal conventions, identity. Global behavioral rules go in its `rules/rules-global.md` (always-on via the `/setup` import — that's the expensive tier, so confirm before adding there and offer the closest typed file as the alternative).
 - **No module fits** → offer `/add-module` to create one; don't force content into the wrong module.
 
 ## 3. Determine the file
 
-- **Rules**: the type — `general`, `coding`, `testing`, `planning`, `documenting`, `designing` — picks `rules/rules-<type>.md` in the owning module. A rule spanning two types goes in the primary one, repeated in the other only if each doc must stand alone without it.
-- **Knowledge**: pick by kind — a system trap → the gotchas file, a term → the glossary, identity → the about file, a repo fact → the repo map. An existing file that fits beats a new one; create a new topically-named file only when none fits.
+- **Rules**: the type comes from the rule-types registry (`registries/rule-types.md` in the baseline folder) — the matching type picks `rules/rules-<type>.md` in the owning module (`global` → `rules-global.md`). A rule spanning two types goes in the primary one, repeated in the other only if each doc must stand alone without it. **When no registered type fits, offer to mint one**: add the registry line (`- **<type>** — Load when: <trigger>`), create the rules file in the owning module, and re-run `/setup` to generate its skill.
+- **Knowledge**: match the module's **existing** knowledge files first; create a new topically-named file only when none fits (modules commonly keep files like a gotchas doc, a glossary, or an identity doc — examples, not a required set).
 
 ## 4. Check for overlap
 
@@ -43,4 +43,4 @@ Read the target file (and the same-typed file in other active modules) first. If
 
 ## 6. Report back
 
-Give the user: **the classification** (rule vs. knowledge, especially when it differs from how they phrased the request), the entry's final name/text, the exact module and file it landed in, and the reasoning for each choice (one or two sentences). Flag anything notable — an existing entry updated instead, a companion rule offered, a general-rules addition, or a hook candidate.
+Give the user: **the classification** (rule vs. knowledge, especially when it differs from how they phrased the request), the entry's final name/text, the exact module and file it landed in, and the reasoning for each choice (one or two sentences). Flag anything notable — an existing entry updated instead, a companion rule offered, a global-rules addition, or a hook candidate.

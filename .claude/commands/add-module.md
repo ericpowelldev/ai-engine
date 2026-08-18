@@ -12,7 +12,7 @@ If no name was given, ask for it. Then:
 
 Ask the user (in one round of questions, skipping anything already stated):
 
-- **Activation scope first** — is this a **global** module (active in every session — working style, identity) or a **scoped** one? Global → the scope section begins with the exact line `Scope: always` (`/setup` keys on it). Scoped → push for the concrete paths, repos, and contexts where it applies: a module with a vague scope silently never activates.
+- **Activation scope first** — is this a **global** module (active in every session — working style, identity) or a **scoped** one? Global → the scope section begins with the exact line `Scope: always` (`/setup` keys on it), and if it's the user's first/only global module, **highly recommend naming it `Core`** (the convention; the engine keys on the scope, not the name). Scoped → push for the concrete paths, repos, and contexts where it applies: a module with a vague scope silently never activates.
 - One or two sentences on what the organization/context is and what the user does there.
 - Any rules, facts, or guides they already know belong in it (optional — the module can start empty).
 
@@ -27,7 +27,7 @@ Copy `modules/_template/` to `modules/<Name>/`, then tailor it:
 
 ## 3. Install and verify
 
-Run `hooks/setup.sh` from the baseline folder — it installs any module wiring and, for a global module, wires `rules/rules-general.md` into the always-on import block. Confirm the module is gitignored (`git check-ignore modules/<Name>/README.md` matches — modules never commit).
+Run `hooks/setup.sh` from the baseline folder — it installs any module wiring and, for a global module, wires `rules/rules-global.md` into the always-on import block. Confirm the module is gitignored (`git check-ignore modules/<Name>/README.md` matches — modules never commit).
 
 ## 4. Report back
 

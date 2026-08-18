@@ -17,10 +17,10 @@ Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defi
 ### What it does
 
 - Runs `hooks/setup.sh` for the mechanical steps:
-  - Writes the managed **always-on import block** into your user-level `~/.claude/CLAUDE.md` (merging, never overwriting): this folder's `CLAUDE.md` plus each global module's (`Scope: always`) `rules/rules-general.md` — so the mechanics and your always-on rules load in every session no matter where it boots.
-  - Installs the root commands and rule skills into `~/.claude/` so they work in sessions booted anywhere.
+  - Writes the managed **always-on import block** into your user-level `~/.claude/CLAUDE.md` (merging, never overwriting): this folder's `CLAUDE.md` plus each global module's (`Scope: always`) `rules/rules-global.md` — so the mechanics and your always-on rules load in every session no matter where it boots.
+  - Installs the root commands into `~/.claude/` and **generates the rule-type skills** from your registry (`registries/rule-types.md`) — one per registered type your modules actually use, its trigger taken from the registry.
   - Syncs each present module's `wiring/` — commands and skills into `~/.claude/`, and every `wiring/hooks.json` entry into `~/.claude/settings.json` — all manifest-tracked, so removed modules clean up. The committed `.claude/` stays module-agnostic.
-- On a first run (no modules besides `_template/`), walks you through creating your first modules via `/add-module`: a global one for your working style and identity, and a scoped one for your organization if you have one.
+- On a first run (no modules besides `_template/`), walks you through creating your first modules via `/add-module` — a global one for your working style and identity (**highly recommended: name it `Core`**), seeding your rule-types registry along the way, and a scoped one for your organization if you have one.
 
 ## Terminal shortcuts (optional)
 

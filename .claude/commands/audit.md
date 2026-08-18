@@ -1,18 +1,20 @@
 ---
-description: Deep-dive audit — full-content consistency, reference integrity, contract-vs-implementation drift; optionally target a module by name (fuzzy) or "all"
+description: Deep-dive audit of one module (fuzzy-matched, asks if omitted) or the engine — full-content consistency, reference integrity, drift
 ---
 
 Audit deeply. The baseline folder is `{{AI_DIR}}` (if that placeholder is literal, the baseline folder is the current project root).
 
-Optional scope argument: $ARGUMENTS
+Scope argument: $ARGUMENTS
 
 **Resolve the scope first:**
 
-- **No argument** → audit the baseline: the engine only (every committed file — the baseline holds no content).
 - **A module name** → fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "aw" → AcmeWidgets), then substring. Exactly one match → audit that module. Zero or multiple matches → list the modules found and ask which was meant.
-- **`all`** → the baseline plus every module (skip `_template` as a module; it's audited as part of the baseline).
+- **`engine`** (or `baseline`) → audit the engine only: every committed file (including `modules/_template/`) — the baseline holds no content, so this is the maintainer's check, useful after editing engine files or before pushing the shared repo.
+- **No argument** → don't default anywhere: list the auditable targets — the modules found, plus `engine` — and ask which one.
 
-This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/` and `hooks/`, and the whole `modules/_template/`; for a module: every module file. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
+One target per run — a full-content audit of everything at once is too much scope to do well; audit targets one at a time, in separate runs.
+
+This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `hooks/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
 
 ## 1. Reference integrity (the core pass)
 
@@ -31,9 +33,9 @@ Every pointer in every file must resolve. Check, in each file:
 The same fact stated in two places must match:
 
 - The folder map (`CLAUDE.md`'s table, `README.md`'s table, the folder READMEs) — same folders, same purposes, same committed/local split.
-- The rule-type list — identical everywhere it appears.
+- The rule-types registry (`registries/rule-types.md`) vs. the modules' `rules-*.md` files: every used type registered, registered-but-unused types noted.
 - The documented gitignore pattern vs. the actual `.gitignore` vs. the README's "Committed?" column.
-- Any behavior described in two docs (setup flow, module activation, wiring install) — descriptions agree.
+- Any behavior described in two docs (setup flow, module activation, wiring install, skill generation) — descriptions agree.
 
 ## 3. Contract vs. implementation
 
@@ -53,13 +55,16 @@ Docs that promise behavior are checked against the code that delivers it:
 
 ## 5. Wiring health
 
-- Installed copies in `~/.claude/commands/` and `~/.claude/skills/` match their sources with `{{AI_DIR}}` resolved; manifest entries all point at existing files; no unresolved placeholders.
+- Installed command copies in `~/.claude/commands/` match their sources with `{{AI_DIR}}` resolved; manifest entries all point at existing files; no unresolved placeholders.
 - Every root command except `setup.md` is installed; every module wiring wrapper is installed and targets an existing file.
+- Generated skills in `~/.claude/skills/` match the registry exactly: one per registered type in use, none missing, none orphaned, descriptions matching the registry's triggers.
 
 ## 6. Content quality
 
-- Rules: short, rule-shaped, imperative, domain-prefix named, one concern each, user-neutral; the why included only where it changes application. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely).
+- Rules: short, rule-shaped, imperative, domain-prefix named, one concern each; the why included only where it changes application. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
+- **Each rule fits its file's registry trigger**: a rule sitting under a type whose `Load when:` wouldn't fire for it belongs in a different registered type — flag cross-type misfilings.
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
+- **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
 - Structure: every module has a README whose activation scope is either the exact line `Scope: always` or concrete paths/repos/contexts; no nested `modules/` inside a module.
 - Markdown fences at column 0 everywhere.
 

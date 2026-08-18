@@ -7,7 +7,7 @@
 
 1. **Load the module**: read `README.md`, then the knowledge docs a session always needs (<e.g. the workspace map>). Keep the rest as lookups.
 2. **Survey the active work**: <e.g. list the org's project folders — names only, don't read into them>.
-3. **Ask what this session is for**, offering the real options by name: <existing project X / new project / an isolated issue>.
+3. **Ask what this session is for**, offering the real options by name: <e.g. existing effort X / a new effort / a quick question>.
 4. **On the answer**, <the module's opening ritual — e.g. read the project's own context doc and give a status read — then wait for confirmation before starting work>.
 
 If the user already stated the work in their message, skip the question and confirm orientation in one short paragraph instead.

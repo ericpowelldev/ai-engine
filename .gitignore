@@ -1,4 +1,7 @@
 modules/*
 !modules/README.md
 !modules/_template/
+registries/*
+!registries/README.md
+!registries/*.template.md
 .DS_Store

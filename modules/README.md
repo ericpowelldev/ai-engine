@@ -13,8 +13,8 @@ modules/<Name>/
 ├── orient.md      # Optional: module-specific orientation, followed by /orient
 ├── audit.md       # Optional: module-specific audit checks, run by /audit <name>
 ├── setup.md       # Optional: module-specific setup steps, run by /setup
-├── rules/         # rules-<type>.md files (general, coding, testing, planning,
-│                  # documenting, designing)
+├── rules/         # rules-<type>.md files — types and triggers are defined in
+│                  # the engine's registries/rule-types.md (global = reserved)
 ├── guides/        # Deliverable how-tos, wrapped by module-prefixed commands
 ├── knowledge/     # Facts: identity (about.md), glossaries, repo maps, gotchas
 ├── scratchpad/    # Module-specific brainstorming
@@ -28,7 +28,7 @@ No nested `modules/` inside a module.
 
 Declared in the module's README — the most important thing it says:
 
-- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its `rules/rules-general.md` is wired into the always-on layer; its identity knowledge is read at orientation.
+- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its `rules/rules-global.md` is wired into the always-on layer; its identity knowledge is read at orientation. **Highly recommended**: every user has one, named **`Core`** by convention, holding their non-org-specific rules, identity, and knowledge (the engine keys on the scope, not the name).
 - **Concrete paths/repos/contexts**: a **scoped** module, activating when the work matches. Vague scope = the module silently never activates.
 
 All active modules compose; on conflict, the more specifically-scoped module wins for its own work.
