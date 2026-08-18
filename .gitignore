@@ -1,8 +1,13 @@
+# Modules
 modules/*
 !modules/README.md
 !modules/_template/
+
+# Registries
 registries/*
 !registries/README.md
 !registries/*.template.md
+
+# OS Files
 .DS_Store
 desktop.ini
