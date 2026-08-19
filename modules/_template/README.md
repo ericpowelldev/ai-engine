@@ -24,10 +24,14 @@ This module applies when the work touches any of:
 
 ## Routing
 
-<!-- A table the agent follows after reading this file: what to read, when. -->
+<!-- A table the agent follows after reading this file: what to read, when.
+     Knowledge is free-form: any file, any name — no filename is guaranteed. For a doc
+     orientation must always load (identity, workspace map), write "read during
+     orientation" in its When cell; /orient reads exactly the docs marked that way. -->
 
 | Read | When |
 |---|---|
+| `knowledge/<file>.md` | <e.g. who the user is here> — read during orientation |
 | `knowledge/<file>.md` | <the situation that calls for it> |
 | `rules/rules-<type>.md` | Loaded automatically by the rule-type skills — types and their triggers are defined in the engine's `registries/rule-types.md` |
 | `guides/` | Producing a deliverable — via the `/<module>-*` commands |

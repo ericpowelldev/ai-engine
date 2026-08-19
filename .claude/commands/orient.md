@@ -6,12 +6,31 @@ Orient yourself. The baseline folder is `{{AI_DIR}}` (if that placeholder is lit
 
 Optional module argument: $ARGUMENTS
 
-1. **Baseline mechanics**: read the baseline folder's `CLAUDE.md` (skip if already loaded this session — it normally is, via the user-level import).
-2. **Always-scoped modules**: for each module under `modules/` whose README declares `Scope: always` (skip `_template`), read its `README.md`, its identity knowledge (e.g. `knowledge/about.md`), and its `rules/rules-global.md` — the global rules normally arrive via the user-level import, but re-reading them here makes re-orientation bulletproof in long sessions where early context has been compacted.
+1. **Baseline mechanics**: read the baseline folder's `CLAUDE.md` (skip only when its content is visibly present in the current context; it normally loads via the user-level import, but compaction can drop it mid-session).
+2. **Always-scoped modules**: for each module under `modules/` whose README declares `Scope: always` (skip `_template`), read its `README.md`, the knowledge docs its README routing marks as read during orientation, and its `rules/rules-global.md` (the global rules normally arrive via the user-level import, but re-reading them keeps re-orientation bulletproof when early context has been compacted).
 3. **Resolve the scoped module**:
-   - **Argument given**: fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "aw" → AcmeWidgets), then substring. Exactly one match → use it. Zero or multiple matches → list the modules found and ask which was meant.
-   - **No argument**: check each scoped module's declared scope against the current working directory and the work at hand; a match selects that module. No match → no scoped module.
-4. **Module orientation**: if the resolved module has an `orient.md` at its root, **follow it now** — it owns the rest of the orientation, including what to ask. Otherwise read the module's `README.md` and note its routing, loading rules/knowledge only as the work calls for them.
-5. **If no module orient took over**: ask what this session is for, and confirm before starting any work. (Enumerated session options are module content — a module's `orient.md` owns its own menu.)
+   - **Argument given**: fuzzy-match it against the `modules/` folder names — exact (case-insensitive), then prefix, then initials/abbreviation (e.g. "aw" → AcmeWidgets), then substring. Exactly one match → use it. Zero or multiple matches → list the modules found and ask which was meant. An argument matching an always-scoped module resolves to no scoped module: re-read that module (step 2) and continue.
+   - **No argument**: check each scoped module's declared scope against the current working directory and the work at hand. Every matching module is active (its rules and knowledge apply); when more than one matches, the module matching the work most specifically owns steps 4 and 5, and the report's Modules line names them all. No match → no scoped module.
+4. **Module orientation**: if the module owning the flow has an `orient.md` at its root, **follow it now**: it supplies the module's data for this flow (knowledge to always load, a work survey, the session menu, the opening ritual). Otherwise read the module's `README.md` and note its routing, loading rules/knowledge only as the work calls for them.
+5. **Close with the orientation report** (defined below): every path ends with it.
 
-If the user already stated the work in their message, skip the question and confirm your orientation in one short paragraph instead: active modules, what you understand the task to be, and which rule types you expect to apply.
+## Orientation report
+
+Every orientation, on every path, ends by rendering this structure as the closing message:
+
+```markdown
+## Oriented
+
+- **Modules:** <always-scoped modules> + <each matched scoped module> (matched: <one-line reason>), or "+ no scoped module"
+- **Work:** <the task as the user stated it>, or "not yet stated"
+- **Rule types:** <types from the rule-types registry (`registries/rule-types.md`) this work is expected to trigger>, or "depends on the work"
+
+<tail>
+```
+
+The header block is fixed; only the tail varies:
+
+- **Work not stated**: the tail is the session question. A scoped module's `orient.md` supplies the menu and owns its formatting; with no scoped module, ask plainly what this session is for.
+- **Work already stated**: the tail confirms the understanding in a sentence or two and flows into the module's opening ritual (e.g. a status read), then waits for confirmation before any work starts.
+
+Questions that interrupt orientation itself (module disambiguation in step 3) come before the report; the report renders once orientation completes.
