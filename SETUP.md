@@ -12,11 +12,11 @@ How to wire this folder into your environment.
 
 ## OS support
 
-Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defines the end state, and the agent guarantees it — `hooks/setup.sh` is just the fast path (bash + coreutils, available everywhere Claude Code runs, including Git Bash on Windows). Anything the script can't do on a given machine (e.g. the `settings.json` merge needs `python3`, which Git Bash lacks), the agent performs directly with its own file tools. Module hooks are registered as `bash "<path>"` so they run regardless of the OS shell.
+Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defines the end state, and the agent guarantees it — `scripts/wire.sh` is just the fast path (bash + coreutils, available everywhere Claude Code runs, including Git Bash on Windows). Anything the script can't do on a given machine (e.g. the `settings.json` merge needs `python3`, which Git Bash lacks), the agent performs directly with its own file tools. Module hooks are registered as `bash "<path>"` so they run regardless of the OS shell.
 
 ### What it does
 
-- Runs `hooks/setup.sh` for the mechanical steps:
+- Runs `scripts/wire.sh` for the mechanical steps:
   - Writes the managed **always-on import block** into your user-level `~/.claude/CLAUDE.md` (merging, never overwriting): this folder's `CLAUDE.md` plus each global module's (`Scope: always`) `rules/rules-global.md` — so the mechanics and your always-on rules load in every session no matter where it boots.
   - Installs the root commands into `~/.claude/` and **generates the rule-type skills** from your registry (`registries/rule-types.md`) — one per registered type your modules actually use, its trigger taken from the registry.
   - Syncs each present module's `wiring/` — commands and skills into `~/.claude/`, and every `wiring/hooks.json` entry into `~/.claude/settings.json` — all manifest-tracked, so removed modules clean up. The committed `.claude/` stays module-agnostic.
@@ -28,8 +28,8 @@ The commands cover in-session use; for syncing from a plain terminal, add shortc
 
 ```sh
 alias ai='cd <path-to-this-folder> && claude'
-alias ai-pull='bash <path-to-this-folder>/hooks/pull.sh'
-alias ai-push='bash <path-to-this-folder>/hooks/push.sh'
+alias ai-pull='bash <path-to-this-folder>/scripts/pull.sh'
+alias ai-push='bash <path-to-this-folder>/scripts/push.sh'
 ```
 
 `ai` opens an agent session in the baseline folder; `ai-pull` syncs everything down and refreshes the wiring; `ai-push "message"` commits and pushes the module repos (message optional). Shells without POSIX aliases (e.g. PowerShell) use their own function/alias equivalent — the scripts only need `bash <script>` to run. These live in your shell config, not in this repo — shortcuts are personal environment, not scaffold.

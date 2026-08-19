@@ -1,6 +1,6 @@
 #!/bin/bash
-# Pull the baseline repo and every module repo, then re-run setup so pulled
-# wiring/rules take effect. Safe: ff-only, never touches a dirty tree.
+# Pull the baseline repo and every module repo, then re-run the wiring refresh
+# (wire.sh) so pulled wiring/rules take effect. Safe: ff-only, never touches a dirty tree.
 
 set -uo pipefail
 
@@ -40,4 +40,4 @@ for MODULE in "$AI_DIR"/modules/*/; do
 done
 
 echo "--- refreshing wiring ---"
-bash "$AI_DIR/hooks/setup.sh"
+bash "$AI_DIR/scripts/wire.sh"

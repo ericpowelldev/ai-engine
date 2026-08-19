@@ -1,5 +1,6 @@
 #!/bin/bash
-# Mechanical half of /setup. Idempotent — safe to re-run after git pull or module changes.
+# The wiring refresh — mechanical half of /setup, also run by /orient and /pull.
+# Idempotent — safe to re-run after git pull or module changes.
 # Installs: the always-on import block (baseline + each always-scoped module's global
 # rules), global commands/skills, module wiring (commands, skills, hooks.json), all
 # manifest-tracked so removed modules clean up. Never overwrites unrelated user config.
@@ -216,4 +217,4 @@ else
   echo "   as hooks.<event>: {matcher, command}, with {{AI_DIR}} = $AI_DIR)"
 fi
 
-echo "setup.sh complete"
+echo "wire.sh complete"

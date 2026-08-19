@@ -4,7 +4,7 @@ This folder — the **baseline folder**, wherever it lives and whatever it's nam
 
 ## Modules
 
-A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's rules, guides, knowledge, scratchpad, hooks, and wiring. Each module's `README.md` is its entry point and declares its **activation scope**:
+A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's rules, guides, knowledge, scratchpad, scripts, hooks, and wiring. Each module's `README.md` is its entry point and declares its **activation scope**:
 
 - **`Scope: always`** — a global module, active in every session (working style, cross-context rules, the user's identity).
 - **Concrete paths/repos/contexts** — the module activates when the work matches.
@@ -29,6 +29,6 @@ An agent's session memory is only the capture layer. Durable content graduates i
 
 - **Commands own procedures; modules contribute data.** `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument and follow the module's `orient.md`/`audit.md`/`setup.md` when present.
 - **Guides are commands** named for the deliverable, shipped in the owning module's `wiring/commands/` with the module prefix.
-- **Hooks** enforce rules mechanically: a module registers its hook scripts via `wiring/hooks.json`; the root `hooks/` folder holds only engine tooling (`setup.sh`, `pull.sh`, `push.sh`).
-- `/setup` installs and refreshes everything (see `SETUP.md`); `/pull` updates the baseline and every module repo, then refreshes the wiring; `/push` commits and pushes the module repos (never the baseline); `/orient` re-orients a session — do its steps on the first message of a session when the work isn't already stated.
+- **Hooks** enforce rules mechanically: a module registers its hook scripts via `wiring/hooks.json`; the root `scripts/` folder holds only engine tooling (`wire.sh`, `pull.sh`, `push.sh`).
+- `/setup` installs and refreshes everything (see `SETUP.md`); `/pull` updates the baseline and every module repo, then refreshes the wiring; `/push` commits and pushes the module repos (never the baseline); `/orient` re-orients a session, running the wiring refresh first so every session self-heals — do its steps on the first message of a session when the work isn't already stated.
 - Claude-specific plumbing lives in `.claude/`; module wiring is installed to the user level and never committed here.

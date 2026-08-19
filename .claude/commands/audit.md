@@ -14,13 +14,13 @@ Scope argument: $ARGUMENTS
 
 One target per run — a full-content audit of everything at once is too much scope to do well; audit targets one at a time, in separate runs.
 
-This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `hooks/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
+This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `scripts/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
 
 ## 1. Reference integrity (the core pass)
 
 Every pointer in every file must resolve. Check, in each file:
 
-- **File paths** mentioned in prose (`modules/<X>/rules/rules-coding.md`, `hooks/setup.sh`, `~/.claude/...`) — the target exists.
+- **File paths** mentioned in prose (`modules/<X>/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
 - **Command and skill names** (`/orient`, `/add-entry`, `coding-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
 - **Named rules** cited across files (`testing-unit-only`, `documenting-fences-column-zero`) — the rule exists, in the file the reference implies, exactly once per tier.
 - **Section references** ("see Sharing & Setup", "see Loading & Wiring") — the section exists in the named document.
@@ -41,9 +41,9 @@ The same fact stated in two places must match:
 
 Docs that promise behavior are checked against the code that delivers it:
 
-- `/setup`'s end-state contract vs. what `hooks/setup.sh` actually does (install targets, manifest behavior, placeholder substitution, degradation paths).
+- `/setup`'s end-state contract vs. what `scripts/wire.sh` actually does (install targets, manifest behavior, placeholder substitution, degradation paths).
 - `SETUP.md`'s claims (OS support, uninstall steps, what gets installed) vs. the script and the manifest.
-- `.claude/settings.json` hook registrations vs. the scripts in `hooks/` and how docs say they're registered.
+- `.claude/settings.json` hook registrations vs. the modules' `hooks/` scripts and how docs say they're registered.
 
 ## 4. Baseline creep & leaks
 

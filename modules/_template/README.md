@@ -35,6 +35,7 @@ This module applies when the work touches any of:
 | `knowledge/<file>.md` | <the situation that calls for it> |
 | `rules/rules-<type>.md` | Loaded automatically by the rule-type skills — types and their triggers are defined in the engine's `registries/rule-types.md` |
 | `guides/` | Producing a deliverable — via the `/<module>-*` commands |
+| `scripts/` | Utility scripts the module's commands and guides call (rule enforcement lives in `hooks/`) |
 | `scratchpad/` | Module-specific brainstorming |
 
 ## Wiring
