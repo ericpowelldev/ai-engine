@@ -8,7 +8,7 @@ Lookup argument: $ARGUMENTS
 
 1. **Inventory**: list every `rules/rules-<type>.md` under `modules/` (skip `_template`), and note which modules are active (always-scoped, plus any whose scope matches the current work).
 2. **Resolve the argument** (first match wins):
-   - **Exact rule name** (domain-prefixed, e.g. `global-git-safety`): print that rule's entry, with the owning module and file.
+   - **Exact rule name** (domain-prefixed, e.g. `<domain>-<concept>`): print that rule's entry, with the owning module and file.
    - **Rule type** (a registered type from `registries/rule-types.md`, e.g. `coding`): print every rule of that type, grouped by module.
    - **Keyword**: search rule names and bodies across all rule files; print each matching rule, grouped by module.
    - **No argument**: print the inventory (registered types, and per module its rule files with a rule count per file).

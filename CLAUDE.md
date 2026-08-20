@@ -19,7 +19,7 @@ Rule types are **user-defined in the rule-types registry** (`registries/rule-typ
 
 - **Typed** rules load on demand: `/setup` generates one skill per registered type that some module actually uses; the skill's trigger is the registry's `Load when:` text, and its body reads `rules/rules-<type>.md` from **every active module**. Contexts compose — work matching two triggers loads both types. Minting a new type = one registry line + a rules file + a `/setup` re-run.
 - **`global`** is the one reserved type — mechanism, not vocabulary: each always-scoped module's `rules/rules-global.md` is wired into the user-level `~/.claude/CLAUDE.md` by `/setup`, loading with every session; never skill-generated.
-- Every rule has a domain-prefixed name (`coding-modular`) so it can be referred to directly. Rules are brief, imperative, one concern each.
+- Every rule has a domain-prefixed name (`<domain>-<concept>`) so it can be referred to directly. Rules are brief, imperative, one concern each.
 
 ## Capture flow
 

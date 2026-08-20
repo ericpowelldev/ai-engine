@@ -21,8 +21,8 @@ This is a full-content audit: **read every in-scope file completely** — for th
 Every pointer in every file must resolve. Check, in each file:
 
 - **File paths** mentioned in prose (`modules/<X>/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
-- **Command and skill names** (`/orient`, `/add-entry`, `coding-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
-- **Named rules** cited across files (`testing-unit-only`, `documenting-fences-column-zero`) — the rule exists, in the file the reference implies, exactly once per tier.
+- **Command and skill names** (`/orient`, `/add-entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
+- **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per tier.
 - **Section references** ("see Sharing & Setup", "see Loading & Wiring") — the section exists in the named document.
 - **Concept names** (the baseline folder, rule types, tier names) — used consistently, no orphaned terminology from earlier designs.
 
@@ -50,8 +50,9 @@ Docs that promise behavior are checked against the code that delivers it:
 - `CLAUDE.md` stays thin (~80 lines); identify demotion candidates if over.
 - **The baseline is content-free**: no behavioral rules, preferences, or opinions anywhere committed — mechanics and neutral template examples only.
 - No user names, emails, or machine-specific paths in committed files (grep with word boundaries — avoid substring false positives).
-- No specific module names in committed plumbing or docs (the template's placeholders don't count).
+- No specific module or rule names in committed plumbing or docs (the template's placeholders don't count).
 - Gitignore split intact: `modules/` contents ignored except the modules README and `_template/`.
+- **Engine READMEs stay one layer deep**: `README.md`, `modules/README.md`, and `modules/_template/README.md` each describe only their immediate top-level structures — no references into subfolders' contents, no reproduced module-internal file trees; the detail lives in the nested READMEs and `_template/`.
 
 ## 5. Wiring health
 
@@ -66,7 +67,8 @@ Docs that promise behavior are checked against the code that delivers it:
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
 - Structure: every module has a README whose activation scope is either the exact line `Scope: always` or concrete paths/repos/contexts; no nested `modules/` inside a module.
-- **Module READMEs route generically**: routing rows point at folders and concepts, never at one specific file (a `guides/` row covers every guide in it) — flag per-file rows and file-specific entries; specifics live in the files themselves, and a README row changes only when a whole new folder or routing concept appears.
+- **Module READMEs stay one layer deep**: the module's README names and explains only its top-level folders — never referencing deeper than that one layer, never enumerating or explaining the contents inside them (a `guides/` row covers every guide in it; each file owns its own detail). Flag deep references (a `rules/rules-global.md` pointer, a `wiring/commands/…` path), per-file routing rows, and content enumeration; a README row changes only when a whole new top-level folder appears.
+- **Modules hold process, not project specifics**: a module's knowledge and rules describe how the user works and cross-project process — identity, glossaries, conventions, reference the module owns. Flag knowledge or rules that document one particular external project (its design, canon, architecture, paths, or domain); that belongs in the project itself (its own docs or `CLAUDE.md`), not the module.
 - **Modules are not a place for actual work to be stored**: a module holds process (rules, guides, knowledge, scripts, hooks, wiring) — flag any work product, work-in-progress, brainstorming, or effort folder found inside one; actual work lives in its own workspace outside the module. Exception: gitignored, regenerable output that a module's own commands generate (declared in the module README) is tool output, not work storage.
 - Markdown fences at column 0 everywhere.
 

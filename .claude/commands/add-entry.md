@@ -36,7 +36,7 @@ Read the target file (and the same-typed file in other active modules) first. If
 
 ## 5. Write it in house style
 
-- **Rules**: domain-prefixed kebab-case name (`coding-modular`), brief, direct, imperative. One line of why only when it changes how the rule is applied.
+- **Rules**: domain-prefixed kebab-case name (`<domain>-<concept>`), brief, direct, imperative. One line of why only when it changes how the rule is applied.
 - **Knowledge**: fact-shaped, present tense, standalone — include the consequence that makes the fact worth knowing.
 - Both: no paragraphs, no war stories, no status snapshots. Modules own their own privacy, so naming the user is fine in identity knowledge; rules still read imperative and person-free.
 - If the entry is mechanically checkable, note that a module hook (registered via `wiring/hooks.json`) could enforce it deterministically and offer to write one.
