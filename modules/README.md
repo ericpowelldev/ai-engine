@@ -1,6 +1,6 @@
 # modules/
 
-Self-contained content packs — **the only place content lives in this system**. Each module holds everything for one organization or context: rules, guides, knowledge, scratch, scripts, hooks, and wiring. The baseline is just the engine; modules make it do something.
+Self-contained content packs — **the only place content lives in this system**. Each module holds everything for one organization or context: rules, guides, knowledge, scripts, hooks, and wiring. A module is process, never a place to store actual work. The baseline is just the engine; modules make it do something.
 
 ## Structure
 
@@ -17,7 +17,6 @@ modules/<Name>/
 │                  # the engine's registries/rule-types.md (global = reserved)
 ├── guides/        # Deliverable how-tos, wrapped by module-prefixed commands
 ├── knowledge/     # Facts: identity (about.md), glossaries, repo maps, gotchas
-├── scratchpad/    # Module-specific brainstorming
 ├── scripts/       # Utility scripts the module's commands and guides call
 ├── hooks/         # Scripts enforcing this module's rules mechanically
 └── wiring/        # commands/ (installed by /setup) + hooks.json (registrations)

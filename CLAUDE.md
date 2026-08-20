@@ -1,10 +1,10 @@
 # AI Baseline
 
-This folder — the **baseline folder**, wherever it lives and whatever it's named — is the engine of a modular rules system for working with an AI agent. The baseline itself carries **no content and no opinions**: all rules, guides, knowledge, and scratch live in **modules**, and this file only defines how the system works. Follow these mechanics in every session.
+This folder — the **baseline folder**, wherever it lives and whatever it's named — is the engine of a modular rules system for working with an AI agent. The baseline itself carries **no content and no opinions**: all rules, guides, and knowledge live in **modules**, and this file only defines how the system works. Follow these mechanics in every session.
 
 ## Modules
 
-A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's rules, guides, knowledge, scratchpad, scripts, hooks, and wiring. Each module's `README.md` is its entry point and declares its **activation scope**:
+A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's rules, guides, knowledge, scripts, hooks, and wiring. Each module's `README.md` is its entry point and declares its **activation scope**:
 
 - **`Scope: always`** — a global module, active in every session (working style, cross-context rules, the user's identity).
 - **Concrete paths/repos/contexts** — the module activates when the work matches.
