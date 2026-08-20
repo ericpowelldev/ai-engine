@@ -22,22 +22,21 @@ This module applies when the work touches any of:
 - Any <org> repo opened directly
 - Any task about <org>'s systems, customers, or domain
 
-## Routing
+## Layout
 
-<!-- A table the agent follows after reading this file: what to read, when.
-     Knowledge is free-form: any file, any name — no filename is guaranteed. For a doc
-     orientation must always load (identity, workspace map), write "read during
-     orientation" in its When cell; /orient reads exactly the docs marked that way. -->
+<!-- A folder-level map: name each top-level folder and what it holds — no deeper.
+     Don't list or explain individual files; each file, and any nested README, owns that.
+     Knowledge loading: a global module has all of `knowledge/` read during orientation;
+     a scoped module names the docs to always load in its `orient.md`, the rest are lookups. -->
 
-| Read | When |
+| Folder | Holds |
 |---|---|
-| `knowledge/<file>.md` | <e.g. who the user is here> — read during orientation |
-| `knowledge/<file>.md` | <the situation that calls for it> |
-| `rules/rules-<type>.md` | Loaded automatically by the rule-type skills — types and their triggers are defined in the engine's `registries/rule-types.md` |
-| `guides/` | Producing a deliverable — via the `/<module>-*` commands |
+| `rules/` | The module's rules — global rules load every session, typed rules load on demand through their skills (types and triggers defined in the engine's `registries/`) |
+| `knowledge/` | Facts and identity the module needs (see the loading note above) |
+| `guides/` | Deliverable procedures, run through the module's `/<module>-*` commands |
 | `scripts/` | Utility scripts the module's commands and guides call (rule enforcement lives in `hooks/`) |
 
 ## Wiring
 
-<!-- What `wiring/` ships: command wrappers (module-prefixed), hook registrations
-     (`wiring/hooks.json`). Installed by /setup; the whole module stays local. -->
+<!-- What `wiring/` ships: module-prefixed command wrappers and hook registrations.
+     Installed by /setup; the whole module stays local. -->

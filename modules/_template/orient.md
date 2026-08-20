@@ -3,7 +3,7 @@
 <!-- OPTIONAL. Module data for /orient once this module is resolved. The command owns
      the procedure (the session question, the orientation report, waiting for
      confirmation); this file supplies only what the module contributes to it. Delete
-     this file to fall back to the generic behavior (follow the README's routing). -->
+     this file to fall back to the generic behavior (follow the README's layout). -->
 
 - **Always-load knowledge**: <the knowledge docs a session always needs, e.g. the workspace map>. Keep the rest as lookups.
 - **Work survey**: <e.g. list the org's project folders — names only, don't read into them>.

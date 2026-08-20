@@ -4,38 +4,20 @@ Self-contained content packs — **the only place content lives in this system**
 
 ## Structure
 
-Copy `_template/` (via `/add-module`) — it carries detailed examples for every file:
-
-```
-modules/<Name>/
-├── README.md      # ENTRY POINT: what the module is, its ACTIVATION SCOPE,
-│                  # and a routing map into the folders below
-├── orient.md      # Optional: module-specific orientation, followed by /orient
-├── audit.md       # Optional: module-specific audit checks, run by /audit <name>
-├── setup.md       # Optional: module-specific setup steps, run by /setup
-├── rules/         # rules-<type>.md files — types and triggers are defined in
-│                  # the engine's registries/rule-types.md (global = reserved)
-├── guides/        # Deliverable how-tos, wrapped by module-prefixed commands
-├── knowledge/     # Facts: identity (about.md), glossaries, repo maps, gotchas
-├── scripts/       # Utility scripts the module's commands and guides call
-├── hooks/         # Scripts enforcing this module's rules mechanically
-└── wiring/        # commands/ (installed by /setup) + hooks.json (registrations)
-```
-
-No nested `modules/` inside a module.
+Every module shares one shape. Copy `_template/` (via `/add-module`) to start a new one — it carries the canonical layout with detailed examples for every file, and is the reference for what a module contains. Modules never nest inside each other.
 
 ## Activation scope
 
 Declared in the module's README — the most important thing it says:
 
-- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its `rules/rules-global.md` is wired into the always-on layer; its identity knowledge is read at orientation. **Highly recommended**: every user has one, named **`Core`** by convention, holding their non-org-specific rules, identity, and knowledge (the engine keys on the scope, not the name).
+- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its global rules are wired into the always-on layer and its knowledge is read at orientation. **Highly recommended**: every user has one, named **`Core`** by convention, holding their non-org-specific rules, identity, and knowledge (the engine keys on the scope, not the name).
 - **Concrete paths/repos/contexts**: a **scoped** module, activating when the work matches. Vague scope = the module silently never activates.
 
 All active modules compose; on conflict, the more specifically-scoped module wins for its own work.
 
 ## Modules extend commands with data
 
-The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument (initials or partial names match) and follow the module's `orient.md`/`audit.md`/`setup.md` when present. Deliverable guides get module-prefixed command wrappers in `wiring/commands/`; mechanical checks register via `wiring/hooks.json`. Never module-specific commands for orient/audit/setup themselves.
+The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument (initials or partial names match) and follow the module's own orient/audit/setup data when present. Deliverable guides get module-prefixed command wrappers; mechanical checks register through the module's wiring. Never module-specific commands for orient/audit/setup themselves.
 
 ## Privacy & portability
 
