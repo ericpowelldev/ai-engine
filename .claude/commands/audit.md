@@ -66,6 +66,7 @@ Docs that promise behavior are checked against the code that delivers it:
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
 - Structure: every module has a README whose activation scope is either the exact line `Scope: always` or concrete paths/repos/contexts; no nested `modules/` inside a module.
+- **Module READMEs route generically**: routing rows point at folders and concepts, never at one specific file (a `guides/` row covers every guide in it) — flag per-file rows and file-specific entries; specifics live in the files themselves, and a README row changes only when a whole new folder or routing concept appears.
 - **Modules are not a place for actual work to be stored**: a module holds process (rules, guides, knowledge, scripts, hooks, wiring) — flag any work product, work-in-progress, brainstorming, or effort folder found inside one; actual work lives in its own workspace outside the module. Exception: gitignored, regenerable output that a module's own commands generate (declared in the module README) is tool output, not work storage.
 - Markdown fences at column 0 everywhere.
 
