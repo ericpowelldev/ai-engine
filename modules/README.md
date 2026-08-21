@@ -17,7 +17,7 @@ All active modules compose; on conflict, the more specifically-scoped module win
 
 ## Modules extend commands with data
 
-The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument (initials or partial names match) and follow the module's own orient/audit/setup data when present. Deliverable guides get module-prefixed command wrappers; mechanical checks register through the module's wiring. Never module-specific commands for orient/audit/setup themselves.
+The generic `/orient`, `/audit`, and `/setup` take an optional fuzzy module argument (initials or partial names match) and follow the module's own orient/audit/setup data when present. Deliverable guides get module-prefixed command wrappers, a module can ship its own hand-written skills, and mechanical checks register through the module's wiring. Never module-specific commands for orient/audit/setup themselves.
 
 ## Privacy & portability
 

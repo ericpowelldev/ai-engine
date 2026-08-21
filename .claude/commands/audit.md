@@ -50,7 +50,7 @@ Docs that promise behavior are checked against the code that delivers it:
 - `CLAUDE.md` stays thin (~80 lines); identify demotion candidates if over.
 - **The baseline is content-free**: no behavioral rules, preferences, or opinions anywhere committed — mechanics and neutral template examples only.
 - No user names, emails, or machine-specific paths in committed files (grep with word boundaries — avoid substring false positives).
-- No specific module or rule names in committed plumbing or docs (the template's placeholders don't count).
+- No specific module or rule names in committed plumbing or docs (the template's placeholders and the recommended `Core` naming convention don't count).
 - Gitignore split intact: `modules/` contents ignored except the modules README and `_template/`.
 - **Engine READMEs stay one layer deep**: `README.md`, `modules/README.md`, and `modules/_template/README.md` each describe only their immediate top-level structures — no references into subfolders' contents, no reproduced module-internal file trees; the detail lives in the nested READMEs and `_template/`.
 

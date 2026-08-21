@@ -9,7 +9,7 @@ A module is a self-contained pack under `modules/<Name>/` holding an organizatio
 - **`Scope: always`** — a global module, active in every session (working style, cross-context rules, the user's identity).
 - **Concrete paths/repos/contexts** — the module activates when the work matches.
 
-Multiple modules are active at once: every always-scoped module plus any scope-matched one. Their content composes; on conflict, the more specifically-scoped module wins for its own work. **Before starting work, identify the active modules** — read each always-scoped module's README (plus its identity knowledge) and check the scoped modules for a match; read a matching module's README first and follow its layout.
+Multiple modules are active at once: every always-scoped module plus any scope-matched one. Their content composes; on conflict, the more specifically-scoped module wins for its own work. **Before starting work, identify the active modules** — read each always-scoped module's README (plus its knowledge docs) and check the scoped modules for a match; read a matching module's README first and follow its layout.
 
 `modules/_template/` is the committed scaffold: copy it (via `/add-module`) to build a new module. Everything else under `modules/` is gitignored — modules are local and own their own privacy.
 

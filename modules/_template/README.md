@@ -38,5 +38,5 @@ This module applies when the work touches any of:
 
 ## Wiring
 
-<!-- What `wiring/` ships: module-prefixed command wrappers and hook registrations.
-     Installed by /setup; the whole module stays local. -->
+<!-- What `wiring/` ships: module-prefixed command wrappers, hook registrations, and
+     any hand-written skills. Installed by /setup; the whole module stays local. -->
