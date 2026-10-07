@@ -22,12 +22,12 @@ A fact with a rule-shaped consequence is captured as knowledge, with a companion
 All content lives in modules — the baseline holds none:
 
 - **Scoped module** — the entry involves a specific organization's or context's systems, repos, conventions, or domain in any way. Match against each scoped module's declared scope.
-- **Always-scoped module** — cross-context content: working style, universal conventions, identity. Global behavioral rules go in its `rules/rules-global.md` (always-on via the `/setup` import — that's the expensive tier, so confirm before adding there and offer the closest typed file as the alternative).
-- **No module fits** → offer `/add-module` to create one; don't force content into the wrong module.
+- **Always-scoped module** — cross-context content: working style, universal conventions, identity. Global behavioral rules go in its `content/rules/rules-global.md`, and rules specific to one brand of agent (its models, dispatch, instruction file, tool quirks) in its `content/rules/rules-<agent>.md` (both always-on via the `/setup` import — that's the expensive tier, so confirm before adding there and offer the closest typed file as the alternative).
+- **No module fits** → offer `/module` to create one; don't force content into the wrong module.
 
 ## 3. Determine the file
 
-- **Rules**: the type comes from the rule-types registry (`registries/rule-types.md` in the baseline folder) — the matching type picks `rules/rules-<type>.md` in the owning module (`global` → `rules-global.md`). A rule spanning two types goes in the primary one, repeated in the other only if each doc must stand alone without it. **When no registered type fits, offer to mint one**: add the registry line (`- **<type>** — Load when: <trigger>`), create the rules file in the owning module, and re-run `/setup` to generate its skill.
+- **Rules**: the type comes from the rule-types registry (`registries/rule-types.md` in the baseline folder) — the matching type picks `content/rules/rules-<type>.md` in the owning module (`global` → `rules-global.md`; an agent type → `rules-<agent>.md`, always-scoped modules only). A rule spanning two types goes in the primary one, repeated in the other only if each doc must stand alone without it. **When no registered type fits, offer to mint one**: add the registry line (`- **<type>** — Load when: <trigger>`), create the rules file in the owning module, and re-run `/setup` to generate its skill.
 - **Knowledge**: match the module's **existing** knowledge files first; create a new topically-named file only when none fits (modules commonly keep files like a gotchas doc, a glossary, or an identity doc — examples, not a required set).
 
 ## 4. Check for overlap
@@ -36,9 +36,9 @@ Read the target file (and the same-typed file in other active modules) first. If
 
 ## 5. Write it in house style
 
-- **Rules**: domain-prefixed kebab-case name (`<domain>-<concept>`), brief, direct, imperative. One line of why only when it changes how the rule is applied.
+- **Rules**: a named section: a `## <domain>-<concept>` heading (domain-prefixed kebab-case), then a brief, direct, imperative statement of the rule. Add detail below the statement (an example, a table, the exceptions) only when the rule needs it to be followed correctly; one line of why only when it changes how the rule is applied. Always-on files (`rules-global.md`, `rules-<agent>.md`) take the statement only.
 - **Knowledge**: fact-shaped, present tense, standalone — include the consequence that makes the fact worth knowing.
-- Both: no paragraphs, no war stories, no status snapshots. Modules own their own privacy, so naming the user is fine in identity knowledge; rules still read imperative and person-free.
+- Both: no war stories, no status snapshots; knowledge stays compact. Modules own their own privacy, so naming the user is fine in identity knowledge; rules still read imperative and person-free.
 - If the entry is mechanically checkable, note that a module hook (registered via `wiring/hooks.json`) could enforce it deterministically and offer to write one.
 
 ## 6. Report back

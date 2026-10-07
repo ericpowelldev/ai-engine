@@ -26,17 +26,18 @@ This module applies when the work touches any of:
 
 <!-- A folder-level map: name each top-level folder and what it holds — no deeper.
      Don't list or explain individual files; each file, and any nested README, owns that.
-     Knowledge loading: a global module has all of `knowledge/` read during orientation;
-     a scoped module names the docs to always load in its `orient.md`, the rest are lookups. -->
+     Knowledge loading: a global module has all of its knowledge read during orientation;
+     a scoped module names the docs to always load in its orient extension, the rest are lookups. -->
 
 | Folder | Holds |
 |---|---|
-| `rules/` | The module's rules — global rules load every session, typed rules load on demand through their skills (types and triggers defined in the engine's `registries/`) |
-| `knowledge/` | Facts and identity the module needs (see the loading note above) |
-| `guides/` | Deliverable procedures, run through the module's `/<module>-*` commands |
-| `scripts/` | Utility scripts the module's commands and guides call (rule enforcement lives in `hooks/`) |
+| `content/` | The module's agent-agnostic content: its rules (global rules load every session, typed rules load on demand through their skills), guides, knowledge (see the loading note above), and extension files |
+| `scripts/` | Utility scripts the module's commands and guides call (rule enforcement lives in `wiring/`) |
+| `wiring/` | The Claude adapter: command wrappers, hook registrations and their scripts, and any hand-written skills, installed by `/setup` |
 
-## Wiring
+## Commands
 
-<!-- What `wiring/` ships: module-prefixed command wrappers, hook registrations, and
-     any hand-written skills. Installed by /setup; the whole module stays local. -->
+<!-- The command prefix this module's wrappers carry (e.g. `acme-`), or "none". A prefix
+     keeps an org module's commands grouped and distinct; a global module usually needs none. -->
+
+Command prefix: `<prefix>-`

@@ -10,4 +10,4 @@
 
 ## Where content hooks live
 
-Scripts that mechanically enforce a module's rules belong in that module's `hooks/` folder, registered via its `wiring/hooks.json` — `wire.sh` merges those registrations into `~/.claude/settings.json` (entries: `{event, matcher, command}`, with `{{AI_DIR}}` resolved to the baseline folder's absolute path). Hooks read the Claude Code hook JSON from stdin; exit code 2 with a stderr message feeds the finding back to the agent. Keep them fast, side-effect-free, and coreutils-only so they run on macOS, Linux, and Git Bash on Windows.
+Scripts that mechanically enforce a module's rules belong in that module's `wiring/hooks/` folder, registered via its `wiring/hooks.json` — `wire.sh` merges those registrations into `~/.claude/settings.json` (entries: `{event, matcher, command}`, with `{{AI_DIR}}` resolved to the baseline folder's absolute path). Hooks read the Claude Code hook JSON from stdin; exit code 2 with a stderr message feeds the finding back to the agent. Keep them fast, side-effect-free, and coreutils-only so they run on macOS, Linux, and Git Bash on Windows.
