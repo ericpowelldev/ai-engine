@@ -2,7 +2,7 @@
 # The wiring refresh — mechanical half of /setup, also run by /orient and /pull.
 # Idempotent — safe to re-run after git pull or module changes.
 # Installs: the always-on import block (baseline + each always-scoped module's global
-# rules), global commands/skills, module wiring (commands, skills, hooks.json), all
+# and Claude agent rules), global commands/skills, module wiring (commands, skills, hooks.json), all
 # manifest-tracked so removed modules clean up. Never overwrites unrelated user config.
 
 set -euo pipefail
@@ -16,8 +16,10 @@ BLOCK_END="<!-- ai-baseline:end -->"
 mkdir -p "$CLAUDE_USER_DIR/commands" "$CLAUDE_USER_DIR/skills"
 
 # --- 1. Always-on import block in user-level CLAUDE.md ---
-# Baseline import + one global-rules import per always-scoped module (README begins
-# its scope with the exact line "Scope: always"). Managed block, rebuilt every run.
+# Baseline import + each always-scoped module's global rules and Claude agent rules
+# (README begins its scope with the exact line "Scope: always"). This script builds the
+# Claude adapter, so it imports rules-claude.md and no other agent's rules file.
+# Managed block, rebuilt every run.
 USER_CLAUDE_MD="$CLAUDE_USER_DIR/CLAUDE.md"
 touch "$USER_CLAUDE_MD"
 
@@ -26,11 +28,13 @@ BLOCK="$BLOCK_START
 for MODULE in "$AI_DIR"/modules/*/; do
   NAME="$(basename "$MODULE")"
   [ "$NAME" = "_template" ] && continue
-  if [ -f "$MODULE/README.md" ] && grep -q '^Scope: always' "$MODULE/README.md" \
-     && [ -f "$MODULE/rules/rules-global.md" ]; then
-    BLOCK="$BLOCK
-@$AI_DIR/modules/$NAME/rules/rules-global.md"
-  fi
+  [ -f "$MODULE/README.md" ] && grep -q '^Scope: always' "$MODULE/README.md" || continue
+  for ALWAYS_ON in rules-global.md rules-claude.md; do
+    if [ -f "$MODULE/content/rules/$ALWAYS_ON" ]; then
+      BLOCK="$BLOCK
+@$AI_DIR/modules/$NAME/content/rules/$ALWAYS_ON"
+    fi
+  done
 done
 BLOCK="$BLOCK
 $BLOCK_END"
@@ -78,15 +82,16 @@ done
 
 # --- Typed-rule skill generation from the rule-types registry ---
 # The registry (registries/rule-types.md) defines the types and their triggers;
-# a skill is generated only for types some module actually uses. The type
-# "global" is reserved (always-on via the import block, never a skill).
+# a skill is generated only for types some module actually uses. Reserved types
+# never get a skill: "global", and any type whose registry entry reads
+# "Reserved:" (agent rules such as "claude", always-on via the import block).
 REGISTRY="$AI_DIR/registries/rule-types.md"
 
 # Discover the types in use across modules (skip _template, skip global)
 USED_TYPES="$(
   for M in "$AI_DIR"/modules/*/; do
     [ "$(basename "$M")" = "_template" ] && continue
-    for F in "$M"rules/rules-*.md; do
+    for F in "$M"content/rules/rules-*.md; do
       [ -f "$F" ] || continue
       basename "$F" | sed 's/^rules-//; s/\.md$//'
     done
@@ -102,6 +107,7 @@ if [ -f "$REGISTRY" ]; then
   for TYPE in $USED_TYPES; do
     TRIGGER="$(grep -m1 "^- \*\*$TYPE\*\* — Load when: " "$REGISTRY" | sed "s/^- \*\*$TYPE\*\* — Load when: //" || true)"
     if [ -z "$TRIGGER" ]; then
+      grep -q "^- \*\*$TYPE\*\* — Reserved:" "$REGISTRY" && continue
       echo "WARNING: type \"$TYPE\" has rules files but no registry entry — register it in registries/rule-types.md or rename the files"
       continue
     fi
@@ -116,7 +122,7 @@ description: Load when $TRIGGER Loads the $TYPE rules from every active module.
 The baseline folder is \`$AI_DIR\`.
 
 1. Identify the active modules under \`modules/\`: every module whose README declares \`Scope: always\`, plus any whose declared scope matches the current work. (Skip \`_template\`.)
-2. Read \`rules/rules-$TYPE.md\` from each active module that has one.
+2. Read \`content/rules/rules-$TYPE.md\` from each active module that has one.
 3. Apply them together — on conflict, the more specifically-scoped module's rule wins for its own work.
 SKILLEOF
     echo "$SKILL_FILE" >> "$NEW_MANIFEST"

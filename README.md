@@ -4,8 +4,8 @@ A portable, model-agnostic engine for working with an AI agent. The scaffold shi
 
 ## How it works
 
-- **Modules are the only content unit.** Each module under `modules/` is a self-contained pack — rules, guides, knowledge, scripts, hooks, wiring — with a README declaring its **activation scope**: `Scope: always` for a global module (working style, identity), or concrete paths/repos/contexts for a scoped one. Active modules compose.
-- **Two loading layers keep context cheap.** Always-on: the baseline mechanics plus each global module's global rules, wired into your user-level config by setup. On-demand: typed rules load as skills generated from your rule-types registry in `registries/` (you define the types and when each fires; setup generates a skill per type your modules use), guides run as commands, knowledge loads when the work calls for it. Inventing a type is one registry line plus a rules file.
+- **Modules are the only content unit.** Each module under `modules/` is a self-contained pack — agent-agnostic content (rules, guides, knowledge, extensions), scripts, and the agent's wiring — with a README declaring its **activation scope**: `Scope: always` for a global module (working style, identity), or concrete paths/repos/contexts for a scoped one. Active modules compose.
+- **Two loading layers keep context cheap.** Always-on: the baseline mechanics plus each global module's global rules and its rules for the agent in use, wired into your user-level config by setup. On-demand: typed rules load as skills generated from your rule-types registry in `registries/` (you define the types and when each fires; setup generates a skill per type your modules use), guides run as commands, knowledge loads when the work calls for it. Inventing a type is one registry line plus a rules file.
 - **Modules are local.** Everything under `modules/` is gitignored except the shared template — the repo shares the engine, never your content. Each module owns its own privacy, and can be its own git repo for versioning/backup: the engine repo never sees module history, and `/pull` updates the whole family (engine + every module repo) in one motion.
 
 ## Folder map
@@ -27,20 +27,20 @@ Clone anywhere, open Claude Code inside the folder, run `/setup`. On a fresh clo
 
 | Command | What it does |
 |---|---|
-| `/orient [module]` | Orient a session: refreshes the wiring first (self-healing), then loads the always-on modules and the matching scoped module, following that module's own orientation data when it has any |
-| `/add-entry <entry>` | Capture a rule or fact — classifies the shape by content, places it in the owning module, reports the reasoning |
-| `/add-module <name>` | Scaffold a new module from the template — scope first, then content |
+| `/orient [module]` | Orient a session: refreshes the wiring first (self-healing), then loads the always-on modules and the matching scoped module, following the active modules' orient extensions |
+| `/entry <entry>` | Capture a rule or fact — classifies the shape by content, places it in the owning module, reports the reasoning |
+| `/module <name>` | Scaffold a new module from the template — scope first, then content |
 | `/audit <module\|engine>` | Deep-dive audit of one target per run — asks if none given: full-content and reference integrity for a module, or `engine` for the maintainer's baseline check |
 | `/rule-lookup [name\|type\|keyword]` | Look up a rule by exact name, registered type, or keyword and show its current wording; no argument prints the rule inventory |
 | `/setup [module]` | Install or refresh all wiring; walks first-time users through module creation |
 | `/pull` | Update everything: pull the baseline repo and every module repo (ff-only, skips dirty trees), then refresh the wiring |
 | `/push [message]` | Back up the modules: commit and push each module repo's current branch; skips clean modules; never touches the baseline repo |
 
-Modules extend `/orient`, `/audit`, and `/setup` with their own optional data files, never with commands of their own. Deliverable guides get module-prefixed command wrappers inside their module.
+Modules extend `/orient`, `/audit`, `/setup`, and any guide that declares extension points with optional extension files in `content/extensions/`, never with commands of their own. Guides get thin command wrappers inside their module, carrying the module's command prefix when it has one.
 
 ## Adding to it
 
-- **A rule or fact** → `/add-entry`. An agent's session memory is only the capture layer; durable corrections graduate into a module.
+- **A rule or fact** → `/entry`. An agent's session memory is only the capture layer; durable corrections graduate into a module.
 - **A guide** → the owning module, plus a thin command wrapper.
-- **A mechanical check** → a hook script in the owning module, registered through its wiring.
-- **A new organization or context** → `/add-module`.
+- **A mechanical check** → a hook script in the owning module's `wiring/hooks/`, registered through its `wiring/hooks.json`.
+- **A new organization or context** → `/module`.

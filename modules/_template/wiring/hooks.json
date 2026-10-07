@@ -2,6 +2,6 @@
   {
     "event": "PostToolUse",
     "matcher": "Write|Edit",
-    "command": "bash \"{{AI_DIR}}/modules/<Module>/hooks/example-check.sh\""
+    "command": "bash \"{{AI_DIR}}/modules/<Module>/wiring/hooks/example-check.sh\""
   }
 ]

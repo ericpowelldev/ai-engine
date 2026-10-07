@@ -14,14 +14,14 @@ Scope argument: $ARGUMENTS
 
 One target per run — a full-content audit of everything at once is too much scope to do well; audit targets one at a time, in separate runs.
 
-This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `scripts/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has an `audit.md` at its root, also run its checks** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
+This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `scripts/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has a `content/extensions/audit.md`, also run its *Checks* section** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
 
 ## 1. Reference integrity (the core pass)
 
 Every pointer in every file must resolve. Check, in each file:
 
-- **File paths** mentioned in prose (`modules/<X>/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
-- **Command and skill names** (`/orient`, `/add-entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
+- **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
+- **Command and skill names** (`/orient`, `/entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
 - **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per tier.
 - **Section references** ("see Sharing & Setup", "see Loading & Wiring") — the section exists in the named document.
 - **Concept names** (the baseline folder, rule types, tier names) — used consistently, no orphaned terminology from earlier designs.
@@ -43,7 +43,7 @@ Docs that promise behavior are checked against the code that delivers it:
 
 - `/setup`'s end-state contract vs. what `scripts/wire.sh` actually does (install targets, manifest behavior, placeholder substitution, degradation paths).
 - `SETUP.md`'s claims (OS support, uninstall steps, what gets installed) vs. the script and the manifest.
-- `.claude/settings.json` hook registrations vs. the modules' `hooks/` scripts and how docs say they're registered.
+- `.claude/settings.json` hook registrations vs. the modules' `wiring/hooks/` scripts and how docs say they're registered.
 
 ## 4. Baseline creep & leaks
 
@@ -62,14 +62,14 @@ Docs that promise behavior are checked against the code that delivers it:
 
 ## 6. Content quality
 
-- Rules: short, rule-shaped, imperative, domain-prefix named, one concern each; the why included only where it changes application. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
+- Rules: named sections (`## <domain>-<concept>`), each opening with a brief, rule-shaped, imperative statement, one concern each; detail below the statement only where the rule needs it, and the why only where it changes application; always-on files hold statements only. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
 - **Each rule fits its file's registry trigger**: a rule sitting under a type whose `Load when:` wouldn't fire for it belongs in a different registered type — flag cross-type misfilings.
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
 - Structure: every module has a README whose activation scope is either the exact line `Scope: always` or concrete paths/repos/contexts; no nested `modules/` inside a module.
-- **Module READMEs stay one layer deep**: the module's README names and explains only its top-level folders — never referencing deeper than that one layer, never enumerating or explaining the contents inside them (a `guides/` row covers every guide in it; each file owns its own detail). Flag deep references (a `rules/rules-global.md` pointer, a `wiring/commands/…` path), per-file routing rows, and content enumeration; a README row changes only when a whole new top-level folder appears.
+- **Module READMEs stay one layer deep**: the module's README names and explains only its top-level folders — never referencing deeper than that one layer, never enumerating or explaining the contents inside them (a `content/` row covers every rule, guide, and knowledge doc in it; each file owns its own detail). Flag deep references (a `content/rules/rules-global.md` pointer, a `wiring/commands/…` path), per-file routing rows, and content enumeration; a README row changes only when a whole new top-level folder appears.
 - **Modules hold process, not project specifics**: a module's knowledge and rules describe how the user works and cross-project process — identity, glossaries, conventions, reference the module owns. Flag knowledge or rules that document one particular external project (its design, canon, architecture, paths, or domain); that belongs in the project itself (its own docs or `CLAUDE.md`), not the module.
-- **Modules are not a place for actual work to be stored**: a module holds process (rules, guides, knowledge, scripts, hooks, wiring) — flag any work product, work-in-progress, brainstorming, or effort folder found inside one; actual work lives in its own workspace outside the module. Exception: gitignored, regenerable output that a module's own commands generate (declared in the module README) is tool output, not work storage.
+- **Modules are not a place for actual work to be stored**: a module holds process (its content, scripts, and wiring) — flag any work product, work-in-progress, brainstorming, or effort folder found inside one; actual work lives in its own workspace outside the module. Exception: gitignored, regenerable output that a module's own commands generate (declared in the module README) is tool output, not work storage.
 - Markdown fences at column 0 everywhere.
 
 ## Report

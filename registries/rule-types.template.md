@@ -8,6 +8,7 @@
      These entries are EXAMPLES — replace them with your own taxonomy. -->
 
 - **global** — Reserved: always-on rules, loaded in every session via the user-level import; never skill-generated.
+- **claude** — Reserved: agent rules for Claude, always-on in every Claude session via the user-level import; never skill-generated.
 - **coding** — Load when: writing, editing, or reviewing any code, in any language or repo.
 - **designing** — Load when: doing any UI, UX, mockup, styling, or visual design work — components, layouts, colors, typography, themes.
 - **documenting** — Load when: writing or editing any document — markdown files, plans, READMEs, summaries, test plans, or any prose deliverable.
