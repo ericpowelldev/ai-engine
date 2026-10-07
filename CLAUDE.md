@@ -6,7 +6,7 @@ This folder — the **baseline folder**, wherever it lives and whatever it's nam
 
 A module is a self-contained pack under `modules/<Name>/` holding an organization's or context's content and tooling, in one fixed layout:
 
-- **`content/`**: the agent-agnostic content: `rules/`, `guides/`, `knowledge/`, and `extensions/` (see *Wiring*). Paths written inside content are relative to `content/` (`knowledge/x.md` means `content/knowledge/x.md`), with two exceptions: a path naming a file in another module, or in this module outside `content/`, is relative to that module's root (`modules/<Name>/`), and a path describing the folder a guide works in (such as a workstream's `knowledge/decisions.md`) is relative to that folder.
+- **`content/`**: the agent-agnostic content: `rules/`, `guides/`, `knowledge/`, and `extensions/` (see *Wiring*). Paths written inside content are relative to `content/` (`knowledge/x.md` means `content/knowledge/x.md`), with two exceptions: a path naming a file in another module, or in this module outside `content/`, is relative to that module's root (`modules/<Name>/`), and a path describing the folder a guide works in (such as a project folder the guide creates or maintains) is relative to that folder.
 - **`scripts/`**: tooling the guides call.
 - **`wiring/`**: the agent-specific adapter: command wrappers, hook registrations (`hooks.json`), and the hook scripts in `wiring/hooks/`.
 

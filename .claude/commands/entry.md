@@ -38,7 +38,7 @@ Read the target file (and the same-typed file in other active modules) first. If
 
 - **Rules**: a named section: a `## <domain>-<concept>` heading (domain-prefixed kebab-case), then a brief, direct, imperative statement of the rule. Add detail below the statement (an example, a table, the exceptions) only when the rule needs it to be followed correctly; one line of why only when it changes how the rule is applied. Always-on files (`rules-global.md`, `rules-<agent>.md`) take the statement only.
 - **Knowledge**: fact-shaped, present tense, standalone — include the consequence that makes the fact worth knowing.
-- Both: no paragraphs, no war stories, no status snapshots. Modules own their own privacy, so naming the user is fine in identity knowledge; rules still read imperative and person-free.
+- Both: no war stories, no status snapshots; knowledge stays compact. Modules own their own privacy, so naming the user is fine in identity knowledge; rules still read imperative and person-free.
 - If the entry is mechanically checkable, note that a module hook (registered via `wiring/hooks.json`) could enforce it deterministically and offer to write one.
 
 ## 6. Report back

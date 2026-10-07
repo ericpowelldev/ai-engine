@@ -43,7 +43,7 @@ Docs that promise behavior are checked against the code that delivers it:
 
 - `/setup`'s end-state contract vs. what `scripts/wire.sh` actually does (install targets, manifest behavior, placeholder substitution, degradation paths).
 - `SETUP.md`'s claims (OS support, uninstall steps, what gets installed) vs. the script and the manifest.
-- `.claude/settings.json` hook registrations vs. the modules' `wiring/hooks/` scripts and how docs say they're registered.
+- `~/.claude/settings.json` hook registrations vs. the modules' `wiring/hooks/` scripts and how docs say they're registered.
 
 ## 4. Baseline creep & leaks
 
@@ -68,7 +68,7 @@ Docs that promise behavior are checked against the code that delivers it:
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
 - Structure: every module has a README whose activation scope is either the exact line `Scope: always` or concrete paths/repos/contexts; no nested `modules/` inside a module.
 - **Module READMEs stay one layer deep**: the module's README names and explains only its top-level folders — never referencing deeper than that one layer, never enumerating or explaining the contents inside them (a `content/` row covers every rule, guide, and knowledge doc in it; each file owns its own detail). Flag deep references (a `content/rules/rules-global.md` pointer, a `wiring/commands/…` path), per-file routing rows, and content enumeration; a README row changes only when a whole new top-level folder appears.
-- **Modules hold process, not project specifics**: a module's knowledge and rules describe how the user works and cross-project process — identity, glossaries, conventions, reference the module owns. Flag knowledge or rules that document one particular external project (its design, canon, architecture, paths, or domain); that belongs in the project itself (its own docs or `CLAUDE.md`), not the module.
+- **Modules hold process, not project specifics**: a module's knowledge and rules describe how the user works and cross-project process — identity, glossaries, conventions, reference the module owns. Flag knowledge or rules that document one particular external project (its design, canon, architecture, paths, or domain); that belongs in the project itself (its own docs or its instruction file), not the module.
 - **Modules are not a place for actual work to be stored**: a module holds process (its content, scripts, and wiring) — flag any work product, work-in-progress, brainstorming, or effort folder found inside one; actual work lives in its own workspace outside the module. Exception: gitignored, regenerable output that a module's own commands generate (declared in the module README) is tool output, not work storage.
 - Markdown fences at column 0 everywhere.
 

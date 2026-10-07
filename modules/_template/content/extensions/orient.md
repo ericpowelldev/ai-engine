@@ -1,6 +1,6 @@
 # <Module>: /orient extension
 
-<!-- OPTIONAL. Extends the engine's /orient once this module is resolved. The command
+<!-- OPTIONAL. Extends the engine's /orient whenever this module is active. The command
      owns the procedure (the orientation report, the closing session question); each
      `##` section below names one of its extension points and says whether it ADDS to
      or REPLACES the base behavior. Every active module's additions apply; when two

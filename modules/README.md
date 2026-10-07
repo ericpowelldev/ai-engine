@@ -1,6 +1,6 @@
 # modules/
 
-Self-contained content packs — **the only place content lives in this system**. Each module holds everything for one organization or context: rules, guides, knowledge, scripts, hooks, and wiring. A module is process, never a place to store actual work. The baseline is just the engine; modules make it do something.
+Self-contained content packs — **the only place content lives in this system**. Each module holds everything for one organization or context: agent-agnostic content, scripts, and the agent's wiring. A module is process, never a place to store actual work. The baseline is just the engine; modules make it do something.
 
 ## Structure
 
@@ -10,7 +10,7 @@ Every module shares one shape: a `README.md`, a `content/` folder holding its ag
 
 Declared in the module's README — the most important thing it says:
 
-- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its global rules are wired into the always-on layer and its knowledge is read at orientation. **Highly recommended**: every user has one, named **`Core`** by convention, holding their non-org-specific rules, identity, and knowledge (the engine keys on the scope, not the name).
+- **`Scope: always`** (the section body begins with that exact line — `/setup` keys on it): a **global** module, active in every session. Its global rules and its agent rules are wired into the always-on layer, and its knowledge is read at orientation. **Highly recommended**: every user has one, named **`Core`** by convention, holding their non-org-specific rules, identity, and knowledge (the engine keys on the scope, not the name).
 - **Concrete paths/repos/contexts**: a **scoped** module, activating when the work matches. Vague scope = the module silently never activates.
 
 All active modules compose; on conflict, the more specifically-scoped module wins for its own work.
