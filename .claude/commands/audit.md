@@ -20,7 +20,7 @@ This is a full-content audit: **read every in-scope file completely** — for th
 
 Every pointer in every file must resolve. Check, in each file:
 
-- **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists, and a path inside module content follows the content path convention in `CLAUDE.md` (*Modules*): relative to `content/`, or to the module root for a file outside it. A path that resolves only relative to its own file (`../guides/…`) is a convention finding.
+- **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists, and a path inside module content follows the content path convention in `CLAUDE.md` (*Modules*): relative to `content/`, or to the module root for a file outside it. A path that resolves only relative to its own file (`../guides/…`, or a bare sibling name such as `repos.md` written from inside `knowledge/`) is a convention finding.
 - **Command and skill names** (`/orient`, `/entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
 - **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per loading layer.
 - **Extension files** — every `##` section in a module's `content/extensions/<name>.md` names an extension point its command or guide actually declares, and is marked adds or replaces.
@@ -37,6 +37,7 @@ The same fact stated in two places must match:
 - The rule-types registry (`registries/rule-types.md`) vs. the modules' `rules-*.md` files: every used type registered, registered-but-unused types noted.
 - The documented gitignore pattern vs. the actual `.gitignore` vs. the README's "Committed?" column.
 - Any behavior described in two docs (setup flow, module activation, wiring install, skill generation) — descriptions agree.
+- A guide's claim about what another command or guide does matches that command's or guide's own procedure (a guide saying `/x` handles a case that `/x`'s guide never covers is a finding).
 - Guides, templates, and knowledge vs. the rules they apply: no guide step, template field, or knowledge statement contradicts a current rule (a status set at a different moment, a reference a rule allows but a guide forbids, a step a rule removed).
 - A rule's own examples obey that rule and its sibling rules.
 
