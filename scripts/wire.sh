@@ -165,8 +165,9 @@ rm -f "$NEW_MANIFEST"
 # Merges each module's wiring/hooks.json (entries: {event, matcher, command} with
 # {{AI_DIR}} placeholders). Managed: entries referencing this baseline folder are
 # rebuilt from current sources every run, so removed modules unregister.
-# Requires python3 for the JSON merge; degrades gracefully to the /setup agent.
-if command -v python3 > /dev/null 2>&1; then
+# Requires a working python3 for the JSON merge (a placeholder such as the Windows Store
+# alias fails the probe); degrades gracefully to the /setup agent.
+if python3 -c '' > /dev/null 2>&1; then
 python3 - "$AI_DIR" "$CLAUDE_USER_DIR/settings.json" << 'PYEOF'
 import json, os, sys, glob
 
@@ -175,7 +176,7 @@ ai_dir_fwd = ai_dir.replace("\\", "/")
 
 settings = {}
 if os.path.exists(settings_path):
-    with open(settings_path) as f:
+    with open(settings_path, encoding="utf-8") as f:
         settings = json.load(f)
 hooks = settings.setdefault("hooks", {})
 
@@ -184,7 +185,7 @@ desired = {}  # event -> list of {matcher, command}
 for hj in sorted(glob.glob(os.path.join(ai_dir, "modules", "*", "wiring", "hooks.json"))):
     if os.sep + "_template" + os.sep in hj:
         continue
-    with open(hj) as f:
+    with open(hj, encoding="utf-8") as f:
         for entry in json.load(f):
             cmd = entry["command"].replace("{{AI_DIR}}", ai_dir_fwd)
             desired.setdefault(entry["event"], []).append(
@@ -210,7 +211,7 @@ for event in events:
         changed = True
 
 if changed:
-    with open(settings_path, "w") as f:
+    with open(settings_path, "w", encoding="utf-8") as f:
         json.dump(settings, f, indent=2)
         f.write("\n")
     print(f"installed: module hook registrations in {settings_path}")
@@ -218,7 +219,7 @@ else:
     print("ok: module hooks already registered")
 PYEOF
 else
-  echo "SKIPPED: python3 not found — register module hooks via /setup instead"
+  echo "SKIPPED: no working python3 — register module hooks via /setup instead"
   echo "  (merge each modules/*/wiring/hooks.json entry into ~/.claude/settings.json"
   echo "   as hooks.<event>: {matcher, command}, with {{AI_DIR}} = $AI_DIR)"
 fi

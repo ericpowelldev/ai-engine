@@ -22,9 +22,9 @@ Every pointer in every file must resolve. Check, in each file:
 
 - **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
 - **Command and skill names** (`/orient`, `/entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
-- **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per tier.
-- **Section references** ("see Sharing & Setup", "see Loading & Wiring") — the section exists in the named document.
-- **Concept names** (the baseline folder, rule types, tier names) — used consistently, no orphaned terminology from earlier designs.
+- **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per loading layer.
+- **Section references** ("see *Wiring*" in `CLAUDE.md`, "see *Uninstall*" in `SETUP.md`) — the section exists in the named document.
+- **Concept names** (the baseline folder, rule types, loading layers) — used consistently, no orphaned terminology from earlier designs.
 
 **Unresolved-reference protocol:** when a pointer doesn't resolve, don't guess-fix and don't silently delete. First try to infer the intended target — renamed or moved files (check git history if available), near-matching filenames, content that matches what the reference describes. If a clear candidate exists, propose it as the fix with the evidence. **If there is no clear candidate, ask the user** what the reference pointed to or where it moved — collect all such questions and ask them together, then fix per the answers.
 

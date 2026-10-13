@@ -17,7 +17,7 @@ A portable, model-agnostic engine for working with an AI agent. The scaffold shi
 | `.claude/` | Claude Code plumbing: the root commands | Yes |
 | `scripts/` | Engine tooling | Yes |
 | `registries/` | User-managed system-level definitions; scaffolding committed, your registries local | Scaffolding only |
-| `modules/` | Your content packs, plus the committed template to copy | Template only |
+| `modules/` | Your content packs, plus the committed template to copy | README and template only |
 
 ## Getting started
 

@@ -22,7 +22,7 @@ A fact with a rule-shaped consequence is captured as knowledge, with a companion
 All content lives in modules — the baseline holds none:
 
 - **Scoped module** — the entry involves a specific organization's or context's systems, repos, conventions, or domain in any way. Match against each scoped module's declared scope.
-- **Always-scoped module** — cross-context content: working style, universal conventions, identity. Global behavioral rules go in its `content/rules/rules-global.md`, and rules specific to one brand of agent (its models, dispatch, instruction file, tool quirks) in its `content/rules/rules-<agent>.md` (both always-on via the `/setup` import — that's the expensive tier, so confirm before adding there and offer the closest typed file as the alternative).
+- **Always-scoped module** — cross-context content: working style, universal conventions, identity. Global behavioral rules go in its `content/rules/rules-global.md`, and rules specific to one brand of agent (its models, dispatch, instruction file, tool quirks) in its `content/rules/rules-<agent>.md` (both always-on via the `/setup` import — that's the expensive loading layer, so confirm before adding there and offer the closest typed file as the alternative).
 - **No module fits** → offer `/module` to create one; don't force content into the wrong module.
 
 ## 3. Determine the file
