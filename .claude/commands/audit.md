@@ -14,7 +14,7 @@ Scope argument: $ARGUMENTS
 
 One target per run — a full-content audit of everything at once is too much scope to do well; audit targets one at a time, in separate runs.
 
-This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `scripts/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has a `content/extensions/audit.md`, also run its *Checks* section** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
+This is a full-content audit: **read every in-scope file completely** — for the baseline: `CLAUDE.md`, `README.md`, `SETUP.md`, the modules README, everything in `.claude/`, `scripts/`, and `registries/`, and the whole `modules/_template/`; for a module: every module file, plus the rules files (rules only, not the rest of their content) of every other module, for the cross-module checks in section 6. The user's `registries/rule-types.md` is checked in **every** scope — it's system-level. Skimming disqualifies the audit — a file is only audited once it's been read to the last line. Sections 1 and 2 apply to whatever is in scope; 3–5 are baseline (engine) concerns; 6 applies to module content. **When a module is in scope and has a `content/extensions/audit.md`, also run its *Checks* section** — org-specific audit direction lives there. Report findings; propose fixes but apply nothing without approval.
 
 ## 1. Reference integrity (the core pass)
 
@@ -23,6 +23,7 @@ Every pointer in every file must resolve. Check, in each file:
 - **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
 - **Command and skill names** (`/orient`, `/entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
 - **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per loading layer.
+- **Extension files** — every `##` section in a module's `content/extensions/<name>.md` names an extension point its command or guide actually declares, and is marked adds or replaces.
 - **Section references** ("see *Wiring*" in `CLAUDE.md`, "see *Uninstall*" in `SETUP.md`) — the section exists in the named document.
 - **Concept names** (the baseline folder, rule types, loading layers) — used consistently, no orphaned terminology from earlier designs.
 
@@ -63,6 +64,10 @@ Docs that promise behavior are checked against the code that delivers it:
 ## 6. Content quality
 
 - Rules: named sections (`## <domain>-<concept>`, or `<domain>-<category>-<concept>` in a file that names its categories), each opening with a brief, rule-shaped, imperative statement, one concern each; detail below the statement only where the rule needs it, and the why only where it changes application; always-on files hold statements only. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
+- **Rule names and categories**: every rule name is unique across all modules. A rules file that uses categories (`<domain>-<category>-<concept>`) names them in its intro, and every rule in it uses one of them. A category is a concept (structure, naming, workflow), never a module's or organization's name.
+- **No duplicate or pointer-only rules**: flag a rule that says what another rule already says, in the same module or across modules (propose merging into one, keeping any detail only one of them has), and a rule whose body is only pointers to other rules (propose removing it).
+- **Guides point, never restate**: a guide names the rules it follows instead of copying them. Flag copied rule wording, and any count, list, or format a guide repeats from a rule ("the four knowledge files", a copied line format): each goes stale the moment the rule changes.
+- **Graduation candidates**: in a scoped module, flag rules general enough for the always-scoped module: language-agnostic, safe in any codebase without fighting its conventions, and a principle rather than a taste. Inversely, flag always-scoped rules that are really specific to one organization, language, or framework.
 - **Each rule fits its file's registry trigger**: a rule sitting under a type whose `Load when:` wouldn't fire for it belongs in a different registered type — flag cross-type misfilings.
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.
