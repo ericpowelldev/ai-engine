@@ -165,10 +165,19 @@ rm -f "$NEW_MANIFEST"
 # Merges each module's wiring/hooks.json (entries: {event, matcher, command} with
 # {{AI_DIR}} placeholders). Managed: entries referencing this baseline folder are
 # rebuilt from current sources every run, so removed modules unregister.
-# Requires a working python3 for the JSON merge (a placeholder such as the Windows Store
-# alias fails the probe); degrades gracefully to the /setup agent.
-if python3 -c '' > /dev/null 2>&1; then
-python3 - "$AI_DIR" "$CLAUDE_USER_DIR/settings.json" << 'PYEOF'
+# Requires a working Python for the JSON merge: python first, python3 where python is
+# missing (macOS), then py, the Windows launcher. A placeholder such as the Windows Store
+# alias stub fails the probe; with no interpreter, the step degrades gracefully to the
+# /setup agent. When python itself fails but another runs, warn: guides call python.
+PY=
+for candidate in python python3 py; do
+  "$candidate" -c '' > /dev/null 2>&1 && { PY=$candidate; break; }
+done
+if [ -n "$PY" ] && [ "$PY" != python ] && command -v python > /dev/null 2>&1; then
+  echo "WARN: \`python\` resolves but doesn't run (on Windows, the Store's App execution alias stubs); using $PY. Turn off the python.exe and python3.exe aliases in Settings > Apps > Advanced app settings > App execution aliases."
+fi
+if [ -n "$PY" ]; then
+"$PY" - "$AI_DIR" "$CLAUDE_USER_DIR/settings.json" << 'PYEOF'
 import json, os, sys, glob
 
 ai_dir, settings_path = sys.argv[1], sys.argv[2]
@@ -219,7 +228,7 @@ else:
     print("ok: module hooks already registered")
 PYEOF
 else
-  echo "SKIPPED: no working python3 — register module hooks via /setup instead"
+  echo "SKIPPED: no working python (tried python, python3, py) — register module hooks via /setup instead"
   echo "  (merge each modules/*/wiring/hooks.json entry into ~/.claude/settings.json"
   echo "   as hooks.<event>: {matcher, command}, with {{AI_DIR}} = $AI_DIR)"
 fi

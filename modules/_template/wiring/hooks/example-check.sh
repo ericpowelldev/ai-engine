@@ -4,7 +4,7 @@
 # agent's hook payload (JSON) on stdin, exits 0 to stay quiet, or exits 2 with a message
 # on stderr to feed a finding back to the agent. Keep it fast, side-effect-free, and
 # coreutils-only so it runs on macOS, Linux, and Git Bash on Windows; a hook that needs
-# an interpreter (python3, node) fails open when that interpreter is missing.
+# an interpreter (python, node) fails open when that interpreter is missing.
 
 INPUT=$(cat)
 

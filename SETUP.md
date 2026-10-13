@@ -12,7 +12,7 @@ How to wire this folder into your environment.
 
 ## OS support
 
-Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defines the end state, and the agent guarantees it — `scripts/wire.sh` is just the fast path (bash + coreutils, available everywhere Claude Code runs, including Git Bash on Windows). Anything the script can't do on a given machine (e.g. the `settings.json` merge needs `python3`, which Git Bash lacks), the agent performs directly with its own file tools. Module hooks are registered as `bash "<path>"` so they run regardless of the OS shell.
+Works on **macOS, Linux, and Windows**. The design is agent-first: `/setup` defines the end state, and the agent guarantees it — `scripts/wire.sh` is just the fast path (bash + coreutils, available everywhere Claude Code runs, including Git Bash on Windows). Anything the script can't do on a given machine (e.g. the `settings.json` merge needs a working `python`, which Git Bash lacks), the agent performs directly with its own file tools. Module hooks are registered as `bash "<path>"` so they run regardless of the OS shell.
 
 ### What it does
 

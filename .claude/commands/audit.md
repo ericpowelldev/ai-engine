@@ -63,7 +63,7 @@ Docs that promise behavior are checked against the code that delivers it:
 - Installed command copies in `~/.claude/commands/` match their sources with `{{AI_DIR}}` resolved; manifest entries all point at existing files; no unresolved placeholders.
 - Every root command except `setup.md` is installed; every module wiring wrapper is installed and targets an existing file.
 - Generated skills in `~/.claude/skills/` match the registry exactly: one per registered type in use, none missing, none orphaned, descriptions matching the registry's triggers.
-- Every interpreter a hook or the wiring script runs (`python3`, `node`, …) works in this machine's environment, not just resolves to a name: a placeholder or missing interpreter makes a hook fail open silently. Run each hook once with a sample payload.
+- Every interpreter a hook or the wiring script runs (`python`, `node`, …) works in this machine's environment, not just resolves to a name: a placeholder or missing interpreter makes a hook fail open silently. Run each hook once with a sample payload.
 
 ## 6. Content quality
 
