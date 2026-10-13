@@ -62,7 +62,7 @@ Docs that promise behavior are checked against the code that delivers it:
 
 ## 6. Content quality
 
-- Rules: named sections (`## <domain>-<concept>`), each opening with a brief, rule-shaped, imperative statement, one concern each; detail below the statement only where the rule needs it, and the why only where it changes application; always-on files hold statements only. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
+- Rules: named sections (`## <domain>-<concept>`, or `<domain>-<category>-<concept>` in a file that names its categories), each opening with a brief, rule-shaped, imperative statement, one concern each; detail below the statement only where the rule needs it, and the why only where it changes application; always-on files hold statements only. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
 - **Each rule fits its file's registry trigger**: a rule sitting under a type whose `Load when:` wouldn't fire for it belongs in a different registered type — flag cross-type misfilings.
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
 - **Registry triggers don't blatantly overlap**: read all `Load when:` triggers side by side and judge whether two types would fire on the same work — overlapping triggers mean double-loaded or misrouted rules.

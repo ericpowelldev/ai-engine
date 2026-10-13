@@ -23,14 +23,8 @@ Every orientation, on every path, ends by rendering this structure as the closin
 ```markdown
 ## Oriented
 
-|  |  |
-| --- | --- |
-| 🧩 **Modules** | <always-scoped modules> + <each matched scoped module> (matched: <one-line reason>), or "+ no scoped module" |
-| 📁 **Directory** | <the working directory and what it is, per its own docs>, or "the baseline folder" |
-
-📚 **Loaded rules**
-
-- `<rule-name>` (one bullet per loaded rule, names only, no descriptions: the global and agent rules from each always-scoped module, plus any typed rules already triggered)
+- 🧩 **Modules:** <always-scoped modules> + <each matched scoped module> (matched: <one-line reason>), or "+ no scoped module"
+- 📁 **Directory:** <the working directory and what it is, per its own docs>, or "the baseline folder"
 
 - ❌ <error>
 - ⚠️ <warning>
@@ -39,13 +33,13 @@ Every orientation, on every path, ends by rendering this structure as the closin
 <tail>
 ```
 
-The table is fixed: always these two rows, in this order, one line per cell. The loaded-rules list follows it, always present, one rule name per bullet.
+The two lines are fixed: always these, in this order, one line each.
 
-The diagnostics list carries everything the table rows don't, one icon-prefixed sentence per item, ordered worst-first:
+The diagnostics list carries everything those lines don't, one icon-prefixed sentence per item, ordered worst-first:
 
 - **❌ Error** — an orientation step failed or couldn't complete (wiring script failed, a doc was unreadable, a registry warning couldn't be resolved). State what failed and what was skipped because of it.
 - **⚠️ Warning** — something intact but likely to affect the session (overlapping module scopes, a doc contradicting another, missing entry-point documentation).
-- **ℹ️ Note** — context worth surfacing that fits no table row (additional working directories and the modules they would activate, tooling quirks noticed on the way).
+- **ℹ️ Note** — context worth surfacing that fits neither line (additional working directories and the modules they would activate, tooling quirks noticed on the way).
 
 Omit the list entirely when there is nothing to report; never pad it with filler.
 
