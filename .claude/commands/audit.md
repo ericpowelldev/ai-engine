@@ -20,12 +20,12 @@ This is a full-content audit: **read every in-scope file completely** — for th
 
 Every pointer in every file must resolve. Check, in each file:
 
-- **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists.
+- **File paths** mentioned in prose (`modules/<X>/content/rules/rules-coding.md`, `scripts/wire.sh`, `~/.claude/...`) — the target exists, and a path inside module content follows the content path convention in `CLAUDE.md` (*Modules*): relative to `content/`, or to the module root for a file outside it. A path that resolves only relative to its own file (`../guides/…`) is a convention finding.
 - **Command and skill names** (`/orient`, `/entry`, `<type>-rules`) — the wrapper/skill file exists and its frontmatter description still matches what the referencing text claims it does.
 - **Named rules** cited across files (e.g. a `<domain>-<concept>` name) — the rule exists, in the file the reference implies, exactly once per loading layer.
 - **Extension files** — every `##` section in a module's `content/extensions/<name>.md` names an extension point its command or guide actually declares, and is marked adds or replaces.
 - **Section references** ("see *Wiring*" in `CLAUDE.md`, "see *Uninstall*" in `SETUP.md`) — the section exists in the named document.
-- **Concept names** (the baseline folder, rule types, loading layers) — used consistently, no orphaned terminology from earlier designs.
+- **Concept names** (the baseline folder, rule types, loading layers) — used consistently, no orphaned terminology from earlier designs. Every term a rule, guide, template, or hook uses for a process artifact (a plan section, a card field, a status, a review step, a file) is defined by a current rule or guide; a term nothing defines anymore is left over from a removed process.
 
 **Unresolved-reference protocol:** when a pointer doesn't resolve, don't guess-fix and don't silently delete. First try to infer the intended target — renamed or moved files (check git history if available), near-matching filenames, content that matches what the reference describes. If a clear candidate exists, propose it as the fix with the evidence. **If there is no clear candidate, ask the user** what the reference pointed to or where it moved — collect all such questions and ask them together, then fix per the answers.
 
@@ -37,6 +37,8 @@ The same fact stated in two places must match:
 - The rule-types registry (`registries/rule-types.md`) vs. the modules' `rules-*.md` files: every used type registered, registered-but-unused types noted.
 - The documented gitignore pattern vs. the actual `.gitignore` vs. the README's "Committed?" column.
 - Any behavior described in two docs (setup flow, module activation, wiring install, skill generation) — descriptions agree.
+- Guides, templates, and knowledge vs. the rules they apply: no guide step, template field, or knowledge statement contradicts a current rule (a status set at a different moment, a reference a rule allows but a guide forbids, a step a rule removed).
+- A rule's own examples obey that rule and its sibling rules.
 
 ## 3. Contract vs. implementation
 
@@ -45,6 +47,7 @@ Docs that promise behavior are checked against the code that delivers it:
 - `/setup`'s end-state contract vs. what `scripts/wire.sh` actually does (install targets, manifest behavior, placeholder substitution, degradation paths).
 - `SETUP.md`'s claims (OS support, uninstall steps, what gets installed) vs. the script and the manifest.
 - `~/.claude/settings.json` hook registrations vs. the modules' `wiring/hooks/` scripts and how docs say they're registered.
+- In a module audit, the module's scripts and hooks vs. the guides and rules that describe them: each does what the docs claim (what it keeps, skips, refuses, or writes), and the docs claim nothing it doesn't do.
 
 ## 4. Baseline creep & leaks
 
@@ -60,13 +63,15 @@ Docs that promise behavior are checked against the code that delivers it:
 - Installed command copies in `~/.claude/commands/` match their sources with `{{AI_DIR}}` resolved; manifest entries all point at existing files; no unresolved placeholders.
 - Every root command except `setup.md` is installed; every module wiring wrapper is installed and targets an existing file.
 - Generated skills in `~/.claude/skills/` match the registry exactly: one per registered type in use, none missing, none orphaned, descriptions matching the registry's triggers.
+- Every interpreter a hook or the wiring script runs (`python3`, `node`, …) works in this machine's environment, not just resolves to a name: a placeholder or missing interpreter makes a hook fail open silently. Run each hook once with a sample payload.
 
 ## 6. Content quality
 
 - Rules: named sections (`## <domain>-<concept>`, or `<domain>-<category>-<concept>` in a file that names its categories), each opening with a brief, rule-shaped, imperative statement, one concern each; detail below the statement only where the rule needs it, and the why only where it changes application; always-on files hold statements only. Fact-shaped entries belong in knowledge — flag them (and rule-shaped knowledge entries, inversely). (User-neutrality is an engine-only check — section 4; modules own their privacy.)
 - **Rule names and categories**: every rule name is unique across all modules. A rules file that uses categories (`<domain>-<category>-<concept>`) names them in its intro, and every rule in it uses one of them. A category is a concept (structure, naming, workflow), never a module's or organization's name.
 - **No duplicate or pointer-only rules**: flag a rule that says what another rule already says, in the same module or across modules (propose merging into one, keeping any detail only one of them has), and a rule whose body is only pointers to other rules (propose removing it).
-- **Guides point, never restate**: a guide names the rules it follows instead of copying them. Flag copied rule wording, and any count, list, or format a guide repeats from a rule ("the four knowledge files", a copied line format): each goes stale the moment the rule changes.
+- **Docs point, never restate**: a guide or knowledge doc names the rules it follows instead of copying them. Flag copied rule wording, and any count, list, or format repeated from a rule ("the four knowledge files", a copied line format), or from a script that owns it (a guide's manual fallback copying a script's constants): each goes stale the moment its source changes.
+- **Command wrappers are thin**: a module's `wiring/commands/` file points at a guide in `content/guides/` and carries no procedure of its own; a procedure living in a wrapper belongs in a guide, so it stays agent-agnostic.
 - **Graduation candidates**: in a scoped module, flag rules general enough for the always-scoped module: language-agnostic, safe in any codebase without fighting its conventions, and a principle rather than a taste. Inversely, flag always-scoped rules that are really specific to one organization, language, or framework.
 - **Each rule fits its file's registry trigger**: a rule sitting under a type whose `Load when:` wouldn't fire for it belongs in a different registered type — flag cross-type misfilings.
 - Knowledge: fact-shaped, present tense, standalone, no war stories or status snapshots.
@@ -79,4 +84,11 @@ Docs that promise behavior are checked against the code that delivers it:
 
 ## Report
 
-Findings grouped by section with severity (**fix now** / worth fixing / cosmetic), exact file and line, and the proposed fix — followed by the collected unresolved-reference questions for the user, if any. Clean sections get one line each. End with a one-line coverage statement (files read / files total). Ask before applying any fixes.
+Findings grouped by section with severity (**fix now** / worth fixing / cosmetic), exact file and line, and the proposed fix — followed by the collected unresolved-reference questions for the user, if any. Clean sections get one line each. A check that needs an environment this machine lacks (a workspace, a repo, a service) is reported as **not run**, with where it can run. Then the **audit's own gaps** (see below). End with a one-line coverage statement (files read / files total). Ask before applying any fixes.
+
+## Keeping this command current
+
+This command audits the system as it stands, so it changes whenever the system does. It grows as the system grows: completeness matters more than brevity, and staleness is the failure to prevent.
+
+- **When the baseline or module structure changes** (a new naming convention, folder, file type, extension point, or a removed process), update this command in the same change, so the next audit checks the new shape and stops checking the old one.
+- **Every audit ends with its own gaps**: after the findings, list any class of finding this checklist didn't name (something caught by judgment rather than by a check) and propose the line to add, here for engine-wide mechanics or in the module's `content/extensions/audit.md` for that module's own conventions. The engine stays content-free: a check that encodes one user's preferences goes in their module's extension, never here.
