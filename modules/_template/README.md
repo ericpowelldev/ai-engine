@@ -27,7 +27,10 @@ This module applies when the work touches any of:
 <!-- A folder-level map: name each top-level folder and what it holds — no deeper.
      Don't list or explain individual files; each file, and any nested README, owns that.
      Knowledge loading: a global module has all of its knowledge read during orientation;
-     a scoped module names the docs to always load in its orient extension, the rest are lookups. -->
+     a scoped module names the docs to always load in its orient extension, the rest are lookups.
+     A module's own commands may write generated files to an extra top-level folder such
+     as output/: add a row for it here, and keep it gitignored (the template's .gitignore
+     already ignores output/). Work products never live in a module. -->
 
 | Folder | Holds |
 |---|---|

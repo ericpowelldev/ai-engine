@@ -1,0 +1,6 @@
+# OS Files
+.DS_Store
+desktop.ini
+
+# Tool output (declare any output folder in the module README)
+output/

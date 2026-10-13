@@ -7,5 +7,5 @@
 - **Name:** <name> (<email>)
 - **Role:** <role / what they work on>
 - **How they work:**
-  - <a working preference the agent should honor, e.g. reviews work as diffs piece-by-piece>
+  - <a working preference the agent should honor, e.g. reviews finished work as diffs>
   - <another, e.g. handles all deploys themselves>

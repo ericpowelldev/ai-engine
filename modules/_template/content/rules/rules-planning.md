@@ -4,9 +4,9 @@
 
 Example entries (replace with your own):
 
-## planning-small-reviewable-pieces
+## planning-define-done
 
-Split plans into pieces small enough to review as a single diff; each piece leaves the system working.
+Every plan states its finish line: what must be true, and how each part of it is checked, for the work to count as done.
 
 ## planning-name-the-risks
 
